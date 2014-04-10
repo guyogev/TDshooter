@@ -1,39 +1,57 @@
 package com.guyyo.gdxGame.model;
 
+import java.util.Hashtable;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class Enemy extends Animation {
-	Random rand = new Random();
-	
-	public Enemy() {
-		loadTexture(Assets.enemy_sheet, 4, 11);
-		state = STATE.SPAWN;
-		speed = 2 + rand.nextInt(3);
+	private static Random rand = new Random();
+	private static float minSpeed = 2;
+	private static float minSpeedDelta = .01f;
 
+	enum AnimState {
+		UP, DOWN, LEFT, RIGHT
+	}
+
+	Hashtable<AnimState, Integer> animHash;
+	AnimState animState;
+
+	public Enemy() {
+		animHash = new Hashtable<Enemy.AnimState, Integer>();
+		animHash.put(AnimState.DOWN, 0);
+		animHash.put(AnimState.UP, 1);
+		animHash.put(AnimState.LEFT, 2);
+		animHash.put(AnimState.RIGHT, 3);
+		loadTexture(Assets.enemy_sheet, 4, 11);
+		initParams();
+		state = STATE.SPAWN;
+		speed = 3;
+		animState = AnimState.DOWN;
 	}
 
 	public void draw(Batch batch, float alpha) {
 		if (state != STATE.SPAWN)
-			batch.draw(frames[(int) frameIndex], getX(), getY());
+			super.draw(getFrame(animHash.get(animState)), batch, alpha);
 	}
 
 	public void animate() {
 		if (state == STATE.ALIVE)
-			frameIndex = (frameIndex += .1) % 6;
+			frameCol = (frameCol += .1) % 6; // TODO after frame 6 is dead
+												// animation
 		else if (state == STATE.DEAD) {
-			frameIndex += .3;
-			if (frameIndex > 11)
+			frameCol += .3;
+			if (frameCol >= getRowLength(animHash.get(animState)) - 1)
 				state = STATE.SPAWN;
 		}
 	}
-	
 
 	public void spawn() {
 		float x = rand.nextFloat();
 		setPosition(x * Assets.PLAY_SCREEN_WIDTH, rand.nextFloat()
 				* Assets.PLAY_SCREEN_HEIGTH);
+		speed = minSpeed + rand.nextInt(3);
 		state = STATE.ALIVE;
+		minSpeed += minSpeedDelta;
 	}
 }

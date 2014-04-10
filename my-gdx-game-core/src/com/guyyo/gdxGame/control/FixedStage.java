@@ -41,6 +41,9 @@ public class FixedStage extends Stage implements InputProcessor {
 		// hero & camera movement
 		if (touchpad.isTouched()) {
 			// hero rotation
+			if (hero.isShooting() ){
+				hero.stand();
+			}
 			hero.setRotation(-Math.atan2(touchpad.getKnobPercentX(),
 					touchpad.getKnobPercentY())
 					* 180 / Math.PI);

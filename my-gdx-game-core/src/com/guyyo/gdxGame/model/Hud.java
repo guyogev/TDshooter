@@ -27,8 +27,8 @@ public class Hud extends Table {
 		scoreLable.setText("Score: " + ++score);
 	}
 
-	public void update(int shotsleft, int hp) {
+	public void update(int shotsleft, float hp) {
 		shots.setText("Shots: " + shotsleft);
-		this.hp.setText("HP: " + hp + "%");
+		this.hp.setText("HP: " + (int)hp + "%");
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Animation extends Actor {
@@ -13,12 +14,18 @@ public abstract class Animation extends Actor {
 	}
 
 	public STATE state;
+
 	ArrayList<TextureRegion[]> frames = new ArrayList<TextureRegion[]>();
 	float frameCol, speed;
-
-	public abstract void draw(Batch batch, float alpha);
-
 	int frameRow;
+	Rectangle rectangle;
+
+	public void draw(TextureRegion t, Batch batch, float alpha) {
+		batch.draw(t, getX() - t.getRegionWidth() / 2,
+				getY() - t.getRegionHeight() / 2, getOriginX(), getOriginY(),
+				t.getRegionWidth(), t.getRegionHeight(), getScaleX(),
+				getScaleY(), this.getRotation());
+	}
 
 	public abstract void animate();
 
@@ -37,10 +44,11 @@ public abstract class Animation extends Actor {
 
 	public void initParams() {
 		frameRow = 0;
-		setOrigin(frames.get(frameRow)[0].getRegionWidth() / 2,
-				frames.get(frameRow)[0].getRegionHeight() / 2);
-		setWidth(frames.get(frameRow)[0].getRegionWidth());
-		setHeight(frames.get(frameRow)[0].getRegionHeight());
+		TextureRegion t = frames.get(frameRow)[0];
+		setOrigin(t.getRegionWidth() / 2, t.getRegionHeight() / 2);
+		setWidth(t.getRegionWidth());
+		setHeight(t.getRegionHeight());
+		rectangle = new Rectangle();
 	}
 
 	public TextureRegion getFrame(int frameRow) {
@@ -49,6 +57,15 @@ public abstract class Animation extends Actor {
 
 	public float getSpeed() {
 		return speed;
+	}
+
+	public int getRowLength(int row) {
+		return frames.get(0).length;
+	}
+
+	public Rectangle getRactangle() {
+		rectangle.set(getX(), getY(), getWidth(), getHeight());
+		return rectangle;
 	}
 
 	public void kill() {

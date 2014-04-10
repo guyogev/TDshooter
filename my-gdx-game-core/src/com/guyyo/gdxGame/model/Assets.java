@@ -18,9 +18,11 @@ public final class Assets {
 	// Textures
 	public static Texture bg;
 	public static Texture badlogic;
-	public static Texture hero_sheet;
+	public static Texture heroRun;
+	public static Texture hero2;
 	public static Texture enemy_sheet;
 	public static Texture shot;
+	public static Texture heroPistol;
 	// Skins
 	public static Skin defultSkin;
 	//sound
@@ -39,10 +41,11 @@ public final class Assets {
 
 		bg = new Texture(Gdx.files.internal("bg1.png"));
 		badlogic = new Texture(Gdx.files.internal("badlogic.jpg"));
-		hero_sheet = new Texture(Gdx.files.internal("hero sheet.png"));
+		heroRun = new Texture(Gdx.files.internal("heroRun.png"));
+		heroPistol = new Texture(Gdx.files.internal("heroPistol.png"));
 		enemy_sheet = new Texture(Gdx.files.internal("enemy.png"));
-		;
-		shot = new Texture(Gdx.files.internal("shot.png"));
+		shot = new Texture(Gdx.files.internal("shot2.png"));
+		hero2 = new Texture(Gdx.files.internal("hero2.png"));
 
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 

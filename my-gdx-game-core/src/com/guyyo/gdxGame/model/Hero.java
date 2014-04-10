@@ -1,16 +1,34 @@
 package com.guyyo.gdxGame.model;
 
+import java.util.Hashtable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Hero extends Animation {
-	float rotation, frameIndex, speed, offsetX, offsetY;
-	int shotsLeft, hp;
+	public enum AnimState {
+		RUN, SHOOT
+	}
+
+	Hashtable<AnimState, Integer> animHash;
+
+	public AnimState animState;
+	float speed, offsetX, offsetY, hp;
+	int shotsLeft;
 
 	public Hero() {
-		loadTexture(Assets.hero_sheet, 4, 2);
+		animHash = new Hashtable<AnimState, Integer>();
+		animHash.put(AnimState.RUN, 0);
+		animHash.put(AnimState.SHOOT, 1);
+		loadTexture(Assets.heroRun, 1, 6);
+		loadTexture(Assets.heroPistol, 1, 1);
+		initParams();
+
+		animState = AnimState.RUN;
 		setX(Gdx.graphics.getWidth() / 2);
 		setY(Gdx.graphics.getHeight() / 2);
+		setScale(1.5f);
 		speed = 6;
 		shotsLeft = 10;
 		hp = 100;
@@ -18,21 +36,18 @@ public class Hero extends Animation {
 
 	@Override
 	public void draw(Batch batch, float alpha) {
-		batch.draw(frames[(int) frameIndex],
-				getX() - frames[(int) frameIndex].getRegionWidth() / 2, getY()
-						- frames[(int) frameIndex].getRegionHeight() / 2,
-				getOriginX(), getOriginY(),
-				frames[(int) frameIndex].getRegionWidth(),
-				frames[(int) frameIndex].getRegionHeight(), 1, 1, rotation);
+		TextureRegion t = getFrame(animHash.get(animState));
+		super.draw(t, batch, alpha);
 	}
 
 	@Override
 	public void animate() {
-		frameIndex = (frameIndex += .1) % 5;
+		if (animState == AnimState.RUN)
+			frameCol = (frameCol += .1) % (getRowLength(animHash.get(animState)-1));
 	}
 
 	public void setRotation(double d) {
-		this.rotation = (float) d;
+		setRotation(90 +(float) d);
 	}
 
 	public float getSpeed() {
@@ -40,15 +55,18 @@ public class Hero extends Animation {
 	}
 
 	public void stand() {
-		frameIndex = 0;
+		frameCol = 0;
+		animState = AnimState.RUN;
+
 	}
 
 	public void fire() {
-		frameIndex = 6;
+		animState = AnimState.SHOOT;
+		frameCol = 0;
 		shotsLeft--;
 	}
-	
-	public void reload(){
+
+	public void reload() {
 		shotsLeft = 10;
 	}
 
@@ -84,13 +102,17 @@ public class Hero extends Animation {
 		return shotsLeft;
 	}
 
-	public int getHp() {
+	public float getHp() {
 		return hp;
 	}
 
 	public void decreaseHp() {
-		--hp;
-		if (hp <=0)
+		hp-=.2;
+		if (hp <= 0)
 			kill();
+	}
+
+	public boolean isShooting() {
+		return animState == AnimState.SHOOT;
 	}
 }

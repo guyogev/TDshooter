@@ -22,7 +22,7 @@ public class ShotPool {
 				s.setY(y);
 				s.setDx(dx);
 				s.setDy(dy);
-				s.setRotation((float) deg);
+				s.setRotation((float) 0);//TODO
 				s.state = STATE.ALIVE;
 				Assets.shotSound.play();
 				break;

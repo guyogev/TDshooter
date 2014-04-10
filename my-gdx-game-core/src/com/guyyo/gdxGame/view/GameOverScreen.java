@@ -8,12 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.model.Assets;
 
-public class MainMenuScreen extends MyScreen {
-
+public class GameOverScreen extends MyScreen {
 	Stage stage;
-	String messege = "fire by tapping. move with left touchpad.\n\n tap to begins";
+	String messege = "Game Over";
 
-	public MainMenuScreen(MyGdxGame game) {
+	public GameOverScreen(MyGdxGame game) {
 		this.game = game;
 		stage = new Stage();
 		Table table = new Table();
@@ -31,10 +30,9 @@ public class MainMenuScreen extends MyScreen {
 
 		stage.getCamera().update();
 		stage.draw();
-
+		
 		if (Gdx.input.isTouched()) {
-			game.playScreen = new  PlayScreen(game);
-			game.setScreen(game.playScreen);
+			game.setScreen(new MainMenuScreen(game));
 			dispose();
 		}
 	}
