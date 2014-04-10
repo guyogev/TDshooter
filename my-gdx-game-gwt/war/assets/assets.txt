@@ -1,0 +1,24 @@
+d:war/:0:application/unknown
+i:badlogic.jpg:68465:image/jpeg
+i:bg.jpg:3584109:image/jpeg
+i:bg1.png:449168:image/png
+t:default.fnt:11628:application/unknown
+i:default.png:26179:image/png
+i:enemy.png:30316:image/png
+i:hero sheet.png:77225:image/png
+i:heroPistol.png:2551:image/png
+i:heroPistolReload.png:2220:image/png
+i:heroRun.png:17483:image/png
+i:heroWalk.png:13052:image/png
+a:loop.wav:5141002:audio/x-wav
+i:shot.png:9274:image/png
+a:shot.wav:159254:audio/x-wav
+t:uiskin.atlas:2894:application/unknown
+t:uiskin.json:2843:application/unknown
+i:uiskin.png:22779:image/png
+t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:5068:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:8574:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/depth.fragment.glsl:549:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/depth.vertex.glsl:2687:application/unknown
+t:com/badlogic/gdx/utils/arial-15.fnt:21743:application/unknown
+i:com/badlogic/gdx/utils/arial-15.png:21814:image/png
