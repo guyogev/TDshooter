@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
-lastWarOutDir=C\:\\Users\\owner\\Documents\\\u05D2\u05D9\u05D0\\libGdx games\\tds\\gwt\\war
-warSrcDir=webapp/
+jarsExcludedFromWebInfLib=
+lastWarOutDir=C\:/Users/owner/git/TDshooter/my-gdx-game-gwt/war/WEB-INF
+warSrcDir=webapp
 warSrcDirIsOutput=false
