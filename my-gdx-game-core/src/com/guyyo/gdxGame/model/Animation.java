@@ -1,24 +1,30 @@
 package com.guyyo.gdxGame.model;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.guyyo.gdxGame.model.Hero.AnimState;
 
 public abstract class Animation extends Actor {
 	public static enum STATE {
 		SPAWN, ALIVE, DEAD
 	}
-
+	public static Random rand = new Random();
 	public STATE state;
 
+	Hashtable<AnimState, Integer> animHash;
 	ArrayList<TextureRegion[]> frames = new ArrayList<TextureRegion[]>();
 	float frameCol, speed;
 	int frameRow;
 	Rectangle rectangle;
+
+	public abstract void animate();
 
 	public void draw(TextureRegion t, Batch batch, float alpha) {
 		batch.draw(t, getX() - t.getRegionWidth() / 2,
@@ -26,8 +32,6 @@ public abstract class Animation extends Actor {
 				t.getRegionWidth(), t.getRegionHeight(), getScaleX(),
 				getScaleY(), this.getRotation());
 	}
-
-	public abstract void animate();
 
 	public void loadTexture(Texture t, int rows, int cols) {
 		TextureRegion[][] tmp = TextureRegion.split(t, t.getWidth() / cols,

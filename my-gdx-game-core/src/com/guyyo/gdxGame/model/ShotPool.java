@@ -24,7 +24,6 @@ public class ShotPool {
 				s.setDy(dy);
 				s.setRotation((float) 0);//TODO
 				s.state = STATE.ALIVE;
-				Assets.shotSound.play();
 				break;
 			}
 	}

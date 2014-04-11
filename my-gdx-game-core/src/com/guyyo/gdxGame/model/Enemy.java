@@ -1,12 +1,10 @@
 package com.guyyo.gdxGame.model;
 
 import java.util.Hashtable;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class Enemy extends Animation {
-	private static Random rand = new Random();
 	private static float minSpeed = 2;
 	private static float minSpeedDelta = .01f;
 
@@ -53,5 +51,21 @@ public class Enemy extends Animation {
 		speed = minSpeed + rand.nextInt(3);
 		state = STATE.ALIVE;
 		minSpeed += minSpeedDelta;
+	}
+
+	public void faceRight() {
+		animState = AnimState.RIGHT;
+	}
+
+	public void faceLeft() {
+		animState = AnimState.LEFT;
+	}
+
+	public void faceUp() {
+		animState = AnimState.UP;
+	}
+
+	public void faceDown() {
+		animState = AnimState.DOWN;
 	}
 }

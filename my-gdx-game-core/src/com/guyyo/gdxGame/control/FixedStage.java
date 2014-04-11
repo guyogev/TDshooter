@@ -41,24 +41,23 @@ public class FixedStage extends Stage implements InputProcessor {
 		// hero & camera movement
 		if (touchpad.isTouched()) {
 			// hero rotation
-			if (hero.isShooting() ){
-				hero.stand();
-			}
+			if (hero.isShooting()){
+				hero.run();
+			}//TODO fix rotation degrees
 			hero.setRotation(-Math.atan2(touchpad.getKnobPercentX(),
 					touchpad.getKnobPercentY())
 					* 180 / Math.PI);
 			//hero position
 			x = hero.getX() + hero.getSpeed() * touchpad.getKnobPercentX();
 			y = hero.getY() + hero.getSpeed() * touchpad.getKnobPercentY();
-			if (x > 0 && x < Assets.PLAY_SCREEN_WIDTH - 3 * hero.getWidth()) {
+			if (x > 0 && x < Assets.PLAY_SCREEN_WIDTH - 5 * hero.getWidth()) {
 				hero.setX(x);
-				hero.setOffsetX(hero.getSpeed() * touchpad.getKnobPercentX());
+				hero.updateOffsetX(hero.getSpeed() * touchpad.getKnobPercentX());
 			}
-			if (y > 0 && y < Assets.PLAY_SCREEN_HEIGTH - 2 * hero.getHeight()) {
+			if (y > 0 && y < Assets.PLAY_SCREEN_HEIGTH - 3 * hero.getHeight()) {
 				hero.setY(y);
-				hero.setOffsetY(hero.getSpeed() * touchpad.getKnobPercentY());
+				hero.updateOffsetY(hero.getSpeed() * touchpad.getKnobPercentY());
 			}
-			hero.animate();
 			
 			// camera movement
 			x = hero.getX();
@@ -69,8 +68,12 @@ public class FixedStage extends Stage implements InputProcessor {
 				cam.position.y = hero.getY();
 
 		}
+		else if (!hero.isReloading())
+			hero.stand();
+		
 		// reload button
-		if (reloadButton.isChecked()){
+		if (reloadButton.isChecked() && !hero.isReloading()){
+			Assets.reload.play();
 			hero.reload();
 			reloadButton.setChecked(false);
 		}

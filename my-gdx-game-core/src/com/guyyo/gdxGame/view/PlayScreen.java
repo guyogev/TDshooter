@@ -9,8 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.control.FixedStage;
 import com.guyyo.gdxGame.control.MyGestureController;
-import com.guyyo.gdxGame.control.PlayController;
+import com.guyyo.gdxGame.control.PlayScreenController;
 import com.guyyo.gdxGame.model.Assets;
+import com.guyyo.gdxGame.model.CowPool;
 import com.guyyo.gdxGame.model.Enemy;
 import com.guyyo.gdxGame.model.EnemyPool;
 import com.guyyo.gdxGame.model.Hero;
@@ -23,13 +24,14 @@ public class PlayScreen extends MyScreen {
 	SpriteBatch batch;
 	Stage movingStage; // display game actors
 	FixedStage fixedStage; // display & handle game controls
-	PlayController playController; //game logic
+	PlayScreenController playController; //game logic
 	MyGestureController myGestureController; // Handles Gestures inputs
 	InputMultiplexer inputMultiplexer; // merge inputs from stages
 
 	Hero hero;
 	EnemyPool enemyPool;
 	ShotPool shotPool;
+	CowPool cowPool;
 	Hud hud;
 
 	public PlayScreen(MyGdxGame game) {
@@ -50,6 +52,11 @@ public class PlayScreen extends MyScreen {
 		shotPool = new ShotPool();
 		for (Shot s : shotPool.getPool())
 			movingStage.addActor(s);
+		/* cow pool
+		cowPool = new CowPool();
+		for (Cow c : cowPool.getPool())
+			movingStage.addActor(c);
+			*/
 		// displayed controls
 		fixedStage = new FixedStage(inputMultiplexer, movingStage.getCamera(),
 				hero, enemyPool, shotPool);
@@ -57,8 +64,8 @@ public class PlayScreen extends MyScreen {
 		hud = new Hud();
 		fixedStage.addActor(hud);
 		// playController
-		playController = new PlayController(game, hero, enemyPool, shotPool,
-				hud);
+		playController = new PlayScreenController(game, hero, enemyPool, shotPool,
+				cowPool, hud);
 		// GestureDetector
 		myGestureController = new MyGestureController(movingStage.getCamera(),
 				hero, shotPool);

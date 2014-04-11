@@ -7,25 +7,25 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Hero extends Animation {
-	public enum AnimState {
-		RUN, SHOOT
+	enum AnimState {
+		RUNNING, SHOOTING, RELOADING
 	}
 
-	Hashtable<AnimState, Integer> animHash;
-
-	public AnimState animState;
-	float speed, offsetX, offsetY, hp;
+	AnimState animState;
+	float offsetX, offsetY, hp;
 	int shotsLeft;
 
 	public Hero() {
 		animHash = new Hashtable<AnimState, Integer>();
-		animHash.put(AnimState.RUN, 0);
-		animHash.put(AnimState.SHOOT, 1);
+		animHash.put(AnimState.RUNNING, 0);
+		animHash.put(AnimState.SHOOTING, 1);
+		animHash.put(AnimState.RELOADING, 2);
 		loadTexture(Assets.heroRun, 1, 6);
 		loadTexture(Assets.heroPistol, 1, 1);
+		loadTexture(Assets.heroPistolReload, 1, 1);
 		initParams();
 
-		animState = AnimState.RUN;
+		animState = AnimState.RUNNING;
 		setX(Gdx.graphics.getWidth() / 2);
 		setY(Gdx.graphics.getHeight() / 2);
 		setScale(1.5f);
@@ -42,48 +42,44 @@ public class Hero extends Animation {
 
 	@Override
 	public void animate() {
-		if (animState == AnimState.RUN)
-			frameCol = (frameCol += .1) % (getRowLength(animHash.get(animState)-1));
+		if (animState == AnimState.RUNNING)
+			frameCol = (frameCol += .1)
+					% (getRowLength(animHash.get(animState) - 1));
+		
 	}
 
+	/* *********** Setters *********** */
 	public void setRotation(double d) {
-		setRotation(90 +(float) d);
+		setRotation(90 + (float) d);
 	}
 
+	public void updateOffsetX(float x) {
+		offsetX += x;
+	}
+
+	public void updateOffsetY(float y) {
+		offsetY += y;
+	}
+
+	public void decreaseHp() {
+		 hp -= .2;
+		if (hp <= 0)
+			kill();
+	}
+
+	/* *********** Getters *********** */
 	public float getSpeed() {
 		return speed;
 	}
 
-	public void stand() {
-		frameCol = 0;
-		animState = AnimState.RUN;
-
-	}
-
-	public void fire() {
-		animState = AnimState.SHOOT;
-		frameCol = 0;
-		shotsLeft--;
-	}
-
-	public void reload() {
-		shotsLeft = 10;
-	}
-
 	public float getRelX() {
+		System.out.println("x " + (getX() - offsetX));
 		return getX() - offsetX;
 	}
 
 	public float getRelY() {
+		System.out.println("y " + (getY() - offsetY));
 		return getY() - offsetY;
-	}
-
-	public void setOffsetX(float x) {
-		offsetX += x;
-	}
-
-	public void setOffsetY(float y) {
-		offsetY += y;
 	}
 
 	public float getCenterX() {
@@ -94,10 +90,6 @@ public class Hero extends Animation {
 		return getY() - getOriginY();
 	}
 
-	public boolean canFire() {
-		return shotsLeft > 0;
-	}
-
 	public int getShotsLeft() {
 		return shotsLeft;
 	}
@@ -106,13 +98,40 @@ public class Hero extends Animation {
 		return hp;
 	}
 
-	public void decreaseHp() {
-		hp-=.2;
-		if (hp <= 0)
-			kill();
+	/* ***********	Animation State	***********	*/
+	public void run() {
+		frameCol = 0;
+		animState = AnimState.RUNNING;
 	}
 
+	public void fire() {
+		animState = AnimState.SHOOTING;
+		frameCol = 0;
+		shotsLeft--;
+	}
+
+	public void reload() {
+		shotsLeft = 10;
+	}
+	
+	public void stand() {
+		animState = AnimState.SHOOTING;
+		frameCol = 0;
+	}
+
+	public boolean canFire() {
+		return shotsLeft > 0;
+	}
+
+	public boolean isRunning() {
+		return animState == AnimState.RUNNING;
+	}
+	
 	public boolean isShooting() {
-		return animState == AnimState.SHOOT;
+		return animState == AnimState.SHOOTING;
+	}
+
+	public boolean isReloading() {
+		return animState == AnimState.RELOADING;
 	}
 }

@@ -5,22 +5,39 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.model.Assets;
 
 public class MainMenuScreen extends MyScreen {
 
 	Stage stage;
-	String messege = "fire by tapping. move with left touchpad.\n\n tap to begins";
-
+	String message = "fire by tapping. move with left touchpad.";
+	Table table;
+	TextButton startButton;
+	
+	
 	public MainMenuScreen(MyGdxGame game) {
 		this.game = game;
 		stage = new Stage();
-		Table table = new Table();
+		Gdx.input.setInputProcessor(stage);
+		
+		//create table
+		table = new Table();
 		table.setFillParent(true);
 		table.center();
-		Label text = new Label(messege, Assets.defultSkin);
-		table.add(text);
+		//add welcome message
+		Label text = new Label(message, Assets.defultSkin);
+		table.add(text).top().fill().pad(50).row();
+		//add start button
+
+		startButton = new TextButton("START", Assets.defultSkin);
+		//startButton.pad(20);
+		table.add(startButton).fill().row();
+		
+		Label text2 = new Label("created by Guy Yogev", Assets.defultSkin);
+		table.add(text2).top().fill().pad(50).row();
+		//add table
 		stage.addActor(table);
 	}
 
@@ -32,9 +49,9 @@ public class MainMenuScreen extends MyScreen {
 		stage.getCamera().update();
 		stage.draw();
 
-		if (Gdx.input.isTouched()) {
-			game.playScreen = new  PlayScreen(game);
-			game.setScreen(game.playScreen);
+		if (startButton.isChecked()) {
+			//game.playScreen = new  PlayScreen(game);
+			game.setScreen(new  PlayScreen(game));
 			dispose();
 		}
 	}

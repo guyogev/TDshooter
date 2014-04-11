@@ -11,22 +11,15 @@ public final class Assets {
 	public static float PLAY_SCREEN_WIDTH;
 	public static float PLAY_SCREEN_HEIGTH;
 	// moving camera boundaries
-	public static float MOVING_CAM_MIN_X;
-	public static float MOVING_CAM_MAX_X;
-	public static float MOVING_CAM_MIN_Y;
-	public static float MOVING_CAM_MAX_Y;
+	public static float MOVING_CAM_MIN_X, MOVING_CAM_MAX_X, MOVING_CAM_MIN_Y,
+			MOVING_CAM_MAX_Y;
 	// Textures
-	public static Texture bg;
-	public static Texture badlogic;
-	public static Texture heroRun;
-	public static Texture hero2;
-	public static Texture enemy_sheet;
-	public static Texture shot;
-	public static Texture heroPistol;
+	public static Texture bg, badlogic, heroRun, hero2, enemy_sheet, shot,
+			heroPistol, heroPistolReload, cow;
 	// Skins
 	public static Skin defultSkin;
-	//sound
-	public static Sound shotSound;
+	// sound
+	public static Sound shotSound, pistolEmpty, reload;
 	public static Music music;
 
 	public static void load() {
@@ -41,15 +34,19 @@ public final class Assets {
 
 		bg = new Texture(Gdx.files.internal("bg1.png"));
 		badlogic = new Texture(Gdx.files.internal("badlogic.jpg"));
-		heroRun = new Texture(Gdx.files.internal("heroRun.png"));
-		heroPistol = new Texture(Gdx.files.internal("heroPistol.png"));
+		heroRun = new Texture(Gdx.files.internal("hero run.png"));
+		heroPistol = new Texture(Gdx.files.internal("hero pistol.png"));
+		heroPistolReload = new Texture(Gdx.files.internal("hero pistol reload.png"));
 		enemy_sheet = new Texture(Gdx.files.internal("enemy.png"));
 		shot = new Texture(Gdx.files.internal("shot2.png"));
 		hero2 = new Texture(Gdx.files.internal("hero2.png"));
+		cow = new Texture(Gdx.files.internal("cowsheet.png"));
 
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("shot.wav"));
+		pistolEmpty = Gdx.audio.newSound(Gdx.files.internal("pistol empty.wav"));
+		reload = Gdx.audio.newSound(Gdx.files.internal("reload.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("loop.wav"));
 
 	}
