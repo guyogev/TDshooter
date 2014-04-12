@@ -23,11 +23,11 @@ public class FixedStage extends Stage implements InputProcessor {
 	public FixedStage(InputMultiplexer inputMultiplexer, Camera camera,
 			Hero hero, EnemyPool enemyPool, ShotPool shotpool) {
 		super();
-		touchpad = new Touchpad(10, Assets.defultSkin);
+		touchpad = new Touchpad(5, Assets.touchpadStyle);
 		touchpad.setBounds(15, 15, 150, 150);
 		addActor(touchpad);
 		reloadButton = new TextButton("Reload", Assets.defultSkin);
-		reloadButton.setBounds(Gdx.graphics.getWidth()-100, 15, 70, 70);
+		reloadButton.setBounds(Gdx.graphics.getWidth() - 100, 15, 70, 70);
 		addActor(reloadButton);
 		inputMultiplexer.addProcessor(this);
 		this.hero = hero;
@@ -41,24 +41,28 @@ public class FixedStage extends Stage implements InputProcessor {
 		// hero & camera movement
 		if (touchpad.isTouched()) {
 			// hero rotation
-			if (hero.isShooting()){
+			if (hero.isShooting()) {
 				hero.run();
-			}//TODO fix rotation degrees
+			}// TODO fix rotation degrees
 			hero.setRotation(-Math.atan2(touchpad.getKnobPercentX(),
 					touchpad.getKnobPercentY())
 					* 180 / Math.PI);
-			//hero position
+			// hero position
 			x = hero.getX() + hero.getSpeed() * touchpad.getKnobPercentX();
 			y = hero.getY() + hero.getSpeed() * touchpad.getKnobPercentY();
-			if (x > 0 && x < Assets.PLAY_SCREEN_WIDTH - 5 * hero.getWidth()) {
+			if (x > 0 && x < Assets.PLAY_SCREEN_WIDTH - hero.getWidth() / 2)
 				hero.setX(x);
-				hero.updateOffsetX(hero.getSpeed() * touchpad.getKnobPercentX());
-			}
-			if (y > 0 && y < Assets.PLAY_SCREEN_HEIGTH - 3 * hero.getHeight()) {
+			if (y > 0 && y < Assets.PLAY_SCREEN_HEIGTH - hero.getHeight() / 2)
 				hero.setY(y);
+			// hero position offset if camera stay static
+			if (hero.getX() > Assets.MOVING_CAM_MIN_X
+					&& hero.getX() < Assets.MOVING_CAM_MAX_X)
+				hero.updateOffsetX(hero.getSpeed() * touchpad.getKnobPercentX());
+			//TODO offsetY 
+			if (hero.getY() > Assets.MOVING_CAM_MIN_Y
+					&& hero.getY() < Assets.MOVING_CAM_MAX_Y)
 				hero.updateOffsetY(hero.getSpeed() * touchpad.getKnobPercentY());
-			}
-			
+
 			// camera movement
 			x = hero.getX();
 			y = hero.getY();
@@ -66,17 +70,15 @@ public class FixedStage extends Stage implements InputProcessor {
 				cam.position.x = hero.getX();
 			if (y >= Assets.MOVING_CAM_MIN_Y && y <= Assets.MOVING_CAM_MAX_Y)
 				cam.position.y = hero.getY();
-
-		}
-		else if (!hero.isReloading())
+		} else if (!hero.isReloading())
 			hero.stand();
-		
+
 		// reload button
-		if (reloadButton.isChecked() && !hero.isReloading()){
+		if (reloadButton.isChecked() && !hero.isReloading()) {
 			Assets.reload.play();
 			hero.reload();
 			reloadButton.setChecked(false);
 		}
-		
+
 	}
 }

@@ -35,7 +35,7 @@ public class Enemy extends Animation {
 
 	public void animate() {
 		if (state == STATE.ALIVE)
-			frameCol = (frameCol += .1) % 6; // TODO after frame 6 is dead
+			frameCol = (frameCol + .1f) % 6; // TODO after frame 6 is dead
 												// animation
 		else if (state == STATE.DEAD) {
 			frameCol += .3;

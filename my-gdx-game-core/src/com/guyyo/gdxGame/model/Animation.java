@@ -25,6 +25,7 @@ public abstract class Animation extends Actor {
 	Rectangle rectangle;
 
 	public abstract void animate();
+	public abstract void spawn();
 
 	public void draw(TextureRegion t, Batch batch, float alpha) {
 		batch.draw(t, getX() - t.getRegionWidth() / 2,

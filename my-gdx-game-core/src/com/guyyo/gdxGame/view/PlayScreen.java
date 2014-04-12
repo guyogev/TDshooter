@@ -8,14 +8,14 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.control.FixedStage;
-import com.guyyo.gdxGame.control.MyGestureController;
 import com.guyyo.gdxGame.control.PlayScreenController;
+import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.CowPool;
-import com.guyyo.gdxGame.model.Enemy;
 import com.guyyo.gdxGame.model.EnemyPool;
 import com.guyyo.gdxGame.model.Hero;
 import com.guyyo.gdxGame.model.Hud;
+import com.guyyo.gdxGame.model.PowerUpsPool;
 import com.guyyo.gdxGame.model.Shot;
 import com.guyyo.gdxGame.model.ShotPool;
 
@@ -24,14 +24,15 @@ public class PlayScreen extends MyScreen {
 	SpriteBatch batch;
 	Stage movingStage; // display game actors
 	FixedStage fixedStage; // display & handle game controls
-	PlayScreenController playController; //game logic
-	MyGestureController myGestureController; // Handles Gestures inputs
+	PlayScreenController playController; // game logic
+	// MyGestureController myGestureController; // Handles Gestures inputs
 	InputMultiplexer inputMultiplexer; // merge inputs from stages
 
 	Hero hero;
 	EnemyPool enemyPool;
 	ShotPool shotPool;
 	CowPool cowPool;
+	PowerUpsPool powerUpsPool;
 	Hud hud;
 
 	public PlayScreen(MyGdxGame game) {
@@ -46,17 +47,20 @@ public class PlayScreen extends MyScreen {
 		movingStage.addActor(hero);
 		// enemyPool
 		enemyPool = new EnemyPool();
-		for (Enemy e : enemyPool.getPool())
+		for (Animation e : enemyPool.getPool())
 			movingStage.addActor(e);
 		// shots pool
 		shotPool = new ShotPool();
 		for (Shot s : shotPool.getPool())
 			movingStage.addActor(s);
-		/* cow pool
-		cowPool = new CowPool();
-		for (Cow c : cowPool.getPool())
-			movingStage.addActor(c);
-			*/
+		//powerUps
+		powerUpsPool = new PowerUpsPool();
+		for (Animation p : powerUpsPool.getPool())
+			movingStage.addActor(p);
+		/*
+		 * cow pool cowPool = new CowPool(); for (Cow c : cowPool.getPool())
+		 * movingStage.addActor(c);
+		 */
 		// displayed controls
 		fixedStage = new FixedStage(inputMultiplexer, movingStage.getCamera(),
 				hero, enemyPool, shotPool);
@@ -64,14 +68,18 @@ public class PlayScreen extends MyScreen {
 		hud = new Hud();
 		fixedStage.addActor(hud);
 		// playController
-		playController = new PlayScreenController(game, hero, enemyPool, shotPool,
-				cowPool, hud);
-		// GestureDetector
-		myGestureController = new MyGestureController(movingStage.getCamera(),
-				hero, shotPool);
+		playController = new PlayScreenController(game, hero, enemyPool,
+				shotPool, cowPool, powerUpsPool, hud);
 		inputMultiplexer.addProcessor(new GestureDetector(20, 0.5f, 2, 0.15f,
-				myGestureController));
-		//sound
+				playController));
+		// GestureDetector
+		// myGestureController = new
+		// MyGestureController(movingStage.getCamera(),
+		// hero, shotPool);
+
+		// inputMultiplexer.addProcessor(new GestureDetector(20, 0.5f, 2, 0.15f,
+		// myGestureController));
+		// sound
 		Assets.music.setLooping(true);
 		Assets.music.setVolume(.5f);
 		Assets.music.play();
@@ -90,8 +98,8 @@ public class PlayScreen extends MyScreen {
 				Assets.PLAY_SCREEN_HEIGTH);
 		batch.end();
 		// update game state
-		playController.update();	
-		//draw actors
+		playController.update();
+		// draw actors
 		movingStage.draw();
 		// draw controllers
 		fixedStage.processInput();

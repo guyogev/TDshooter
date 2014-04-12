@@ -45,7 +45,12 @@ public class Hero extends Animation {
 		if (animState == AnimState.RUNNING)
 			frameCol = (frameCol += .1)
 					% (getRowLength(animHash.get(animState) - 1));
-		
+
+	}
+
+	@Override
+	public void spawn() {
+		// TODO Auto-generated method stub
 	}
 
 	/* *********** Setters *********** */
@@ -62,7 +67,7 @@ public class Hero extends Animation {
 	}
 
 	public void decreaseHp() {
-		 hp -= .2;
+		// hp -= .2;
 		if (hp <= 0)
 			kill();
 	}
@@ -73,12 +78,10 @@ public class Hero extends Animation {
 	}
 
 	public float getRelX() {
-		System.out.println("x " + (getX() - offsetX));
 		return getX() - offsetX;
 	}
 
 	public float getRelY() {
-		System.out.println("y " + (getY() - offsetY));
 		return getY() - offsetY;
 	}
 
@@ -98,7 +101,7 @@ public class Hero extends Animation {
 		return hp;
 	}
 
-	/* ***********	Animation State	***********	*/
+	/* *********** Animation State *********** */
 	public void run() {
 		frameCol = 0;
 		animState = AnimState.RUNNING;
@@ -113,7 +116,7 @@ public class Hero extends Animation {
 	public void reload() {
 		shotsLeft = 10;
 	}
-	
+
 	public void stand() {
 		animState = AnimState.SHOOTING;
 		frameCol = 0;
@@ -126,7 +129,7 @@ public class Hero extends Animation {
 	public boolean isRunning() {
 		return animState == AnimState.RUNNING;
 	}
-	
+
 	public boolean isShooting() {
 		return animState == AnimState.SHOOTING;
 	}
@@ -134,4 +137,5 @@ public class Hero extends Animation {
 	public boolean isReloading() {
 		return animState == AnimState.RELOADING;
 	}
+
 }

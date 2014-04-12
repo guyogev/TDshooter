@@ -29,6 +29,11 @@ public class Shot extends Animation {
 				setPosition(getX() + dx, getY() + dy);
 			}
 	}
+	
+	@Override
+	public void spawn() {
+		// TODO Auto-generated method stub	
+	}
 
 	public void setDx(float dx) {
 		this.dx = dx;
