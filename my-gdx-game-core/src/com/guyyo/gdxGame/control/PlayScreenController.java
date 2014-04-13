@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Animation.STATE;
+import com.guyyo.gdxGame.model.Hero.AnimState;
 import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.CowPool;
 import com.guyyo.gdxGame.model.Enemy;
@@ -44,12 +45,14 @@ public class PlayScreenController implements GestureListener {
 			game.setScreen(new GameOverScreen(game));
 			// game.playScreen.dispose();
 		}
+		if (hero.animState == AnimState.RELOADING)
+			hero.checkDoneReloading();
 		hero.animate();
 		// move enemies
 		for (Animation e : enemyPool.getPool()) {
 			if (e.state == STATE.ALIVE) {
-				float x = hero.getX() - e.getX();
-				float y = hero.getCenterY() - e.getY();
+				float x = hero.getCenterX() - e.getCenterX();
+				float y = hero.getCenterY() - e.getCenterY();
 				double deg = Math.atan2(y, x);
 				double cos = Math.cos(deg);
 				double sin = Math.sin(deg);

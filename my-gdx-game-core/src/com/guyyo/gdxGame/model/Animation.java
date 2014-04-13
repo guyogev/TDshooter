@@ -63,6 +63,14 @@ public abstract class Animation extends Actor {
 	public float getSpeed() {
 		return speed;
 	}
+	
+	public float getCenterX() {
+		return getX() - getOriginX();
+	}
+
+	public float getCenterY() {
+		return getY() - getOriginY();
+	}
 
 	public int getRowLength(int row) {
 		return frames.get(0).length;

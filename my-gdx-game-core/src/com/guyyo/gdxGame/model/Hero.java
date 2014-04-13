@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Hero extends Animation {
-	enum AnimState {
+	public enum AnimState {
 		RUNNING, SHOOTING, RELOADING
 	}
 
-	AnimState animState;
+	public AnimState animState;
 	float offsetX, offsetY, hp;
-	int shotsLeft;
+	int shotsLeft, reloadProgress;
 
 	public Hero() {
 		animHash = new Hashtable<AnimState, Integer>();
@@ -45,7 +45,6 @@ public class Hero extends Animation {
 		if (animState == AnimState.RUNNING)
 			frameCol = (frameCol += .1)
 					% (getRowLength(animHash.get(animState) - 1));
-
 	}
 
 	@Override
@@ -85,14 +84,6 @@ public class Hero extends Animation {
 		return getY() - offsetY;
 	}
 
-	public float getCenterX() {
-		return getX() - getOriginX();
-	}
-
-	public float getCenterY() {
-		return getY() - getOriginY();
-	}
-
 	public int getShotsLeft() {
 		return shotsLeft;
 	}
@@ -114,7 +105,17 @@ public class Hero extends Animation {
 	}
 
 	public void reload() {
-		shotsLeft = 10;
+		reloadProgress = 0;
+		animState = AnimState.RELOADING;
+	}
+
+	public void checkDoneReloading() {
+		if (reloadProgress >= 100) {
+			shotsLeft = 10;
+			animState = AnimState.SHOOTING;
+		}
+		else
+			reloadProgress++;
 	}
 
 	public void stand() {
