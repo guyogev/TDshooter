@@ -15,13 +15,16 @@ public class Enemy extends Animation {
 	Hashtable<AnimState, Integer> animHash;
 	AnimState animState;
 
-	public Enemy() {
+	public Enemy(float sheet) {
 		animHash = new Hashtable<Enemy.AnimState, Integer>();
 		animHash.put(AnimState.DOWN, 0);
 		animHash.put(AnimState.UP, 1);
 		animHash.put(AnimState.LEFT, 2);
 		animHash.put(AnimState.RIGHT, 3);
-		loadTexture(Assets.enemy_sheet, 4, 11);
+		if (sheet >= .5f)
+			loadTexture(Assets.enemy, 4, 11);
+		else 
+			loadTexture(Assets.enemy2, 4, 11);
 		initParams();
 		state = STATE.SPAWN;
 		speed = 3;

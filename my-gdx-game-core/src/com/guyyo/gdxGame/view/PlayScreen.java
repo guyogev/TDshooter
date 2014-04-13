@@ -11,12 +11,12 @@ import com.guyyo.gdxGame.control.FixedStage;
 import com.guyyo.gdxGame.control.PlayScreenController;
 import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Assets;
+import com.guyyo.gdxGame.model.BloodPool;
 import com.guyyo.gdxGame.model.CowPool;
 import com.guyyo.gdxGame.model.EnemyPool;
 import com.guyyo.gdxGame.model.Hero;
 import com.guyyo.gdxGame.model.Hud;
 import com.guyyo.gdxGame.model.PowerUpsPool;
-import com.guyyo.gdxGame.model.Shot;
 import com.guyyo.gdxGame.model.ShotPool;
 
 public class PlayScreen extends MyScreen {
@@ -33,6 +33,7 @@ public class PlayScreen extends MyScreen {
 	ShotPool shotPool;
 	CowPool cowPool;
 	PowerUpsPool powerUpsPool;
+	BloodPool bloodPool;
 	Hud hud;
 
 	public PlayScreen(MyGdxGame game) {
@@ -51,16 +52,16 @@ public class PlayScreen extends MyScreen {
 			movingStage.addActor(e);
 		// shots pool
 		shotPool = new ShotPool();
-		for (Shot s : shotPool.getPool())
+		for (Animation s : shotPool.getPool())
 			movingStage.addActor(s);
 		//powerUps
 		powerUpsPool = new PowerUpsPool();
 		for (Animation p : powerUpsPool.getPool())
 			movingStage.addActor(p);
-		/*
-		 * cow pool cowPool = new CowPool(); for (Cow c : cowPool.getPool())
-		 * movingStage.addActor(c);
-		 */
+		//blood
+		bloodPool = new BloodPool();
+		for (Animation b : bloodPool.getPool())
+			movingStage.addActor(b);
 		// displayed controls
 		fixedStage = new FixedStage(inputMultiplexer, movingStage.getCamera(),
 				hero, enemyPool, shotPool);
@@ -69,7 +70,7 @@ public class PlayScreen extends MyScreen {
 		fixedStage.addActor(hud);
 		// playController
 		playController = new PlayScreenController(game, hero, enemyPool,
-				shotPool, cowPool, powerUpsPool, hud);
+				shotPool, cowPool, powerUpsPool, bloodPool, hud);
 		inputMultiplexer.addProcessor(new GestureDetector(20, 0.5f, 2, 0.15f,
 				playController));
 		// GestureDetector

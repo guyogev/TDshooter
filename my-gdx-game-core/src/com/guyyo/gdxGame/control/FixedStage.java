@@ -75,8 +75,8 @@ public class FixedStage extends Stage implements InputProcessor {
 
 		// reload button
 		if (reloadButton.isChecked() && !hero.isReloading()) {
-			Assets.reload.play();
 			hero.reload();
+			Assets.reload.play();
 			reloadButton.setChecked(false);
 		}
 

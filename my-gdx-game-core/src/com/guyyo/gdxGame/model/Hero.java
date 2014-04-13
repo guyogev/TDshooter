@@ -29,7 +29,7 @@ public class Hero extends Animation {
 		setX(Gdx.graphics.getWidth() / 2);
 		setY(Gdx.graphics.getHeight() / 2);
 		setScale(1.5f);
-		speed = 6;
+		speed = 8;
 		shotsLeft = 10;
 		hp = 100;
 	}
@@ -66,7 +66,7 @@ public class Hero extends Animation {
 	}
 
 	public void decreaseHp() {
-		// hp -= .2;
+	//	hp -= .2;
 		if (hp <= 0)
 			kill();
 	}
@@ -105,16 +105,19 @@ public class Hero extends Animation {
 	}
 
 	public void reload() {
-		reloadProgress = 0;
 		animState = AnimState.RELOADING;
+		frameCol = 0;
+		reloadProgress = 0;
+		speed /= 2;
 	}
 
 	public void checkDoneReloading() {
 		if (reloadProgress >= 100) {
 			shotsLeft = 10;
+			speed *= 2;
+			System.out.println(speed);
 			animState = AnimState.SHOOTING;
-		}
-		else
+		} else
 			reloadProgress++;
 	}
 
@@ -124,7 +127,7 @@ public class Hero extends Animation {
 	}
 
 	public boolean canFire() {
-		return shotsLeft > 0;
+		return (shotsLeft > 0 && !isReloading());
 	}
 
 	public boolean isRunning() {

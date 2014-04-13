@@ -7,6 +7,7 @@ import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Animation.STATE;
 import com.guyyo.gdxGame.model.Hero.AnimState;
 import com.guyyo.gdxGame.model.Assets;
+import com.guyyo.gdxGame.model.BloodPool;
 import com.guyyo.gdxGame.model.CowPool;
 import com.guyyo.gdxGame.model.Enemy;
 import com.guyyo.gdxGame.model.EnemyPool;
@@ -24,17 +25,19 @@ public class PlayScreenController implements GestureListener {
 	private EnemyPool enemyPool;
 	private ShotPool shotPool;
 	private PowerUpsPool powerUpPool;
+	private BloodPool bloodPool;
 	// private CowPool cowPool;
 	private Hud hud;
 
-
 	public PlayScreenController(MyGdxGame game, Hero hero, EnemyPool enemyPool,
-			ShotPool shotPool, CowPool cowPool,PowerUpsPool powerUpsPool, Hud hud) {
+			ShotPool shotPool, CowPool cowPool, PowerUpsPool powerUpsPool,
+			BloodPool bloodPool, Hud hud) {
 		this.game = game;
 		this.hero = hero;
 		this.enemyPool = enemyPool;
 		this.shotPool = shotPool;
 		this.powerUpPool = powerUpsPool;
+		this.bloodPool = bloodPool;
 		// this.cowPool = cowPool;
 		this.hud = hud;
 	}
@@ -42,12 +45,14 @@ public class PlayScreenController implements GestureListener {
 	public void update() {
 		// hero
 		if (hero.state == STATE.DEAD) {
+			Assets.music.stop();
 			game.setScreen(new GameOverScreen(game));
 			// game.playScreen.dispose();
 		}
 		if (hero.animState == AnimState.RELOADING)
 			hero.checkDoneReloading();
-		hero.animate();
+		if (hero.isRunning())
+			hero.animate();
 		// move enemies
 		for (Animation e : enemyPool.getPool()) {
 			if (e.state == STATE.ALIVE) {
@@ -77,14 +82,20 @@ public class PlayScreenController implements GestureListener {
 				e.spawn();
 		}
 		// shots
-		for (Shot s : shotPool.getPool())
+		for (Animation s : shotPool.getPool())
 			if (s.state == STATE.ALIVE) {
 				s.animate();
-				detectShotEnemyCollisions(s);
+				detectShotEnemyCollisions((Shot) s);
 			}
+		// powerUps
 		for (Animation p : powerUpPool.getPool())
 			if (p.state == STATE.ALIVE) {
 				p.animate();
+			}
+		// blood
+		for (Animation b : bloodPool.getPool())
+			if (b.state == STATE.ALIVE) {
+				b.animate();
 			}
 		/*
 		 * cows for (Cow c : cowPool.getPool()) if (c.state == STATE.ALIVE) {
@@ -103,6 +114,8 @@ public class PlayScreenController implements GestureListener {
 		for (Animation e : enemyPool.getPool())
 			if (e.state == STATE.ALIVE) {
 				if (colliding(e, s)) {
+					bloodPool.spawn(e.getCenterX() + e.getOriginX(),
+							e.getCenterY());
 					s.kill();
 					e.kill();
 					hud.incrementScore();

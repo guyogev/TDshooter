@@ -16,8 +16,9 @@ public final class Assets {
 	public static float MOVING_CAM_MIN_X, MOVING_CAM_MAX_X, MOVING_CAM_MIN_Y,
 			MOVING_CAM_MAX_Y;
 	// Textures
-	public static Texture bg, badlogic, heroRun, hero2, enemy_sheet, shot,
-			heroPistol, heroPistolReload, cow, powerUps;
+	public static Texture bg, badlogic, heroRun, hero2, enemy, shot,
+			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
+			blood_3, blood_4, blood_5;
 	// Skins
 	public static Skin defultSkin;
 	public static TouchpadStyle touchpadStyle;
@@ -31,42 +32,51 @@ public final class Assets {
 		PLAY_SCREEN_HEIGTH = Gdx.graphics.getHeight() * 3;
 
 		MOVING_CAM_MIN_X = Gdx.graphics.getWidth() / 2;
-		MOVING_CAM_MAX_X = PLAY_SCREEN_WIDTH - Gdx.graphics.getWidth()/2;
+		MOVING_CAM_MAX_X = PLAY_SCREEN_WIDTH - Gdx.graphics.getWidth() / 2;
 		MOVING_CAM_MIN_Y = Gdx.graphics.getHeight() / 2;
-		MOVING_CAM_MAX_Y = PLAY_SCREEN_HEIGTH - Gdx.graphics.getHeight()/2;
+		MOVING_CAM_MAX_Y = PLAY_SCREEN_HEIGTH - Gdx.graphics.getHeight() / 2;
 
 		bg = new Texture(Gdx.files.internal("bg1.png"));
 		badlogic = new Texture(Gdx.files.internal("badlogic.jpg"));
 		heroRun = new Texture(Gdx.files.internal("hero run.png"));
 		heroPistol = new Texture(Gdx.files.internal("hero pistol.png"));
-		heroPistolReload = new Texture(Gdx.files.internal("hero pistol reload.png"));
-		enemy_sheet = new Texture(Gdx.files.internal("enemy.png"));
+		heroPistolReload = new Texture(
+				Gdx.files.internal("hero pistol reload.png"));
+		enemy = new Texture(Gdx.files.internal("enemy.png"));
+		enemy2 = new Texture(Gdx.files.internal("player.png"));
 		shot = new Texture(Gdx.files.internal("shot2.png"));
 		hero2 = new Texture(Gdx.files.internal("hero2.png"));
 		powerUps = new Texture(Gdx.files.internal("powerups.png"));
 		cow = new Texture(Gdx.files.internal("cowsheet.png"));
+		blood_1 = new Texture(Gdx.files.internal("blood_hit_01.png"));
+		//blood_2 = new Texture(Gdx.files.internal("blood_hit_02.png"));
+		blood_3 = new Texture(Gdx.files.internal("blood_hit_03.png"));
+		blood_4 = new Texture(Gdx.files.internal("blood_hit_04.png"));
+		blood_5 = new Texture(Gdx.files.internal("blood_hit_05.png"));
 
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/shot.wav"));
-		pistolEmpty = Gdx.audio.newSound(Gdx.files.internal("sound/pistol empty.wav"));
+		pistolEmpty = Gdx.audio.newSound(Gdx.files
+				.internal("sound/pistol empty.wav"));
 		reload = Gdx.audio.newSound(Gdx.files.internal("sound/reload.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("sound/loop.wav"));
-		
+
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		Skin touchpadSkin = new Skin();
-        
-        touchpadSkin.add("touchBackground", new Texture(Gdx.files.internal("gui/touchpad bg.png")));
-        //Set knob image
-        touchpadSkin.add("touchKnob", new Texture(Gdx.files.internal("gui/touchpad knob.png")));
-        //Create TouchPad Style
-        touchpadStyle = new TouchpadStyle();
-        //Create Drawable's from TouchPad skin
-        Drawable touchBackground = touchpadSkin.getDrawable("touchBackground");
-        Drawable touchKnob = touchpadSkin.getDrawable("touchKnob");
-        //Apply the Drawables to the TouchPad Style
-        touchpadStyle.background = touchBackground;
-        touchpadStyle.knob = touchKnob;
-        //Create new TouchPad with the created style
 
+		touchpadSkin.add("touchBackground",
+				new Texture(Gdx.files.internal("gui/touchpad bg.png")));
+		// Set knob image
+		touchpadSkin.add("touchKnob",
+				new Texture(Gdx.files.internal("gui/touchpad knob.png")));
+		// Create TouchPad Style
+		touchpadStyle = new TouchpadStyle();
+		// Create Drawable's from TouchPad skin
+		Drawable touchBackground = touchpadSkin.getDrawable("touchBackground");
+		Drawable touchKnob = touchpadSkin.getDrawable("touchKnob");
+		// Apply the Drawables to the TouchPad Style
+		touchpadStyle.background = touchBackground;
+		touchpadStyle.knob = touchKnob;
+		// Create new TouchPad with the created style
 
 	}
 }
