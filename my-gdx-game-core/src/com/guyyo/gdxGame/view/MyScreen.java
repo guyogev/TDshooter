@@ -2,8 +2,12 @@ package com.guyyo.gdxGame.view;
 
 import com.badlogic.gdx.Screen;
 import com.guyyo.gdxGame.MyGdxGame;
-
+/*
+ * flowing MVC pattern, screens are the game View.
+ * screen will extract data from the game modal and display it.
+ */
 public abstract class MyScreen implements Screen {
+	//screen hold pointer to the Game object
 	MyGdxGame game;
 
 	@Override

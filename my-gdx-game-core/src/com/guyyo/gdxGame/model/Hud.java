@@ -4,6 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.guyyo.gdxGame.model.Assets;
 
+/*
+ * game statistics
+ */
 public class Hud extends Table {
 	Label scoreLable;
 	Label hp;
@@ -23,7 +26,7 @@ public class Hud extends Table {
 		add(shots).left().row();
 	}
 
-	public void incrementScore() {
+	public void incScore() {
 		scoreLable.setText("Score: " + ++score);
 	}
 

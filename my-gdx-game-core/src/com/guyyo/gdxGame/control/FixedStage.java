@@ -5,35 +5,58 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.EnemyPool;
+import com.guyyo.gdxGame.model.FireOrb;
 import com.guyyo.gdxGame.model.Hero;
 import com.guyyo.gdxGame.model.ShotPool;
 
+/*
+ * Following MVC pattern, the FixedStage will handle game logic.
+ * FixedStage process buttons input
+ */
 public class FixedStage extends Stage implements InputProcessor {
-	Touchpad touchpad;
-	TextButton reloadButton;
-	Hero hero;
+	
 	Camera cam;
+	
+	//hero movement controller
+	Touchpad touchpad;
+	
+	TextButton reloadButton;
+	ImageButton fireButton;
+	
+	Hero hero;
 	EnemyPool enemyPool;
 	ShotPool shotpool;
+	FireOrb fireOrb;
 
 	public FixedStage(InputMultiplexer inputMultiplexer, Camera camera,
-			Hero hero, EnemyPool enemyPool, ShotPool shotpool) {
+			Hero hero, EnemyPool enemyPool, ShotPool shotpool, FireOrb fireOrb) {
 		super();
+
 		touchpad = new Touchpad(5, Assets.touchpadStyle);
 		touchpad.setBounds(15, 15, 150, 150);
 		addActor(touchpad);
+
 		reloadButton = new TextButton("Reload", Assets.defultSkin);
 		reloadButton.setBounds(Gdx.graphics.getWidth() - 100, 15, 70, 70);
 		addActor(reloadButton);
+
+		fireButton = new ImageButton(Assets.fireButtonUp, Assets.fireButtonDown,
+				Assets.fireButtonDown);
+		fireButton.setPosition(Gdx.graphics.getWidth() - 200, 45);
+		fireButton.setChecked(false);
+		addActor(fireButton);
+
 		inputMultiplexer.addProcessor(this);
 		this.hero = hero;
 		this.cam = camera;
 		this.enemyPool = enemyPool;
 		this.shotpool = shotpool;
+		this.fireOrb = fireOrb;
 	}
 
 	public void processInput() {
@@ -44,9 +67,8 @@ public class FixedStage extends Stage implements InputProcessor {
 			if (hero.isShooting()) {
 				hero.run();
 			}// TODO fix rotation degrees
-			hero.setRotation(-Math.atan2(touchpad.getKnobPercentX(),
-					touchpad.getKnobPercentY())
-					* 180 / Math.PI);
+			hero.setRotation((-Math.atan2(touchpad.getKnobPercentX(),
+					touchpad.getKnobPercentY()) * 180 / Math.PI));
 			// hero position
 			x = hero.getX() + hero.getSpeed() * touchpad.getKnobPercentX();
 			y = hero.getY() + hero.getSpeed() * touchpad.getKnobPercentY();
@@ -58,7 +80,7 @@ public class FixedStage extends Stage implements InputProcessor {
 			if (hero.getX() > Assets.MOVING_CAM_MIN_X
 					&& hero.getX() < Assets.MOVING_CAM_MAX_X)
 				hero.updateOffsetX(hero.getSpeed() * touchpad.getKnobPercentX());
-			//TODO offsetY 
+			// TODO offsetY
 			if (hero.getY() > Assets.MOVING_CAM_MIN_Y
 					&& hero.getY() < Assets.MOVING_CAM_MAX_Y)
 				hero.updateOffsetY(hero.getSpeed() * touchpad.getKnobPercentY());
@@ -78,6 +100,18 @@ public class FixedStage extends Stage implements InputProcessor {
 			hero.reload();
 			Assets.reload.play();
 			reloadButton.setChecked(false);
+		}
+		
+		//fire button
+		if (hero.hasPowerUps() && fireButton.isDisabled()){
+			fireButton.setDisabled(false);
+			fireButton.setChecked(false);
+		}
+		if (!fireButton.isDisabled() && fireButton.isChecked()) {
+			System.out.println("fireorb");
+			fireOrb.spawn();
+			hero.decPowerUps();
+			fireButton.setDisabled(true);
 		}
 
 	}

@@ -13,7 +13,7 @@ public class Hero extends Animation {
 
 	public AnimState animState;
 	float offsetX, offsetY, hp;
-	int shotsLeft, reloadProgress;
+	int shotsLeft, reloadProgress, powerUpLeft;
 
 	public Hero() {
 		animHash = new Hashtable<AnimState, Integer>();
@@ -65,8 +65,18 @@ public class Hero extends Animation {
 		offsetY += y;
 	}
 
+	public void incPowerUp() {
+		if (powerUpLeft < 1 )
+			powerUpLeft++;
+	}
+
+	public void decPowerUps() {
+		powerUpLeft--;
+		
+	}
+
 	public void decreaseHp() {
-	//	hp -= .2;
+		hp -= .2;
 		if (hp <= 0)
 			kill();
 	}
@@ -140,6 +150,10 @@ public class Hero extends Animation {
 
 	public boolean isReloading() {
 		return animState == AnimState.RELOADING;
+	}
+
+	public boolean hasPowerUps() {
+		return powerUpLeft > 0;
 	}
 
 }

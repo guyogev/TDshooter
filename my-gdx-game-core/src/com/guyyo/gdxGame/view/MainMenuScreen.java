@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.model.Assets;
@@ -12,33 +11,35 @@ import com.guyyo.gdxGame.model.Assets;
 public class MainMenuScreen extends MyScreen {
 
 	Stage stage;
-	String message = "fire by tapping. move with left touchpad.";
-	Table table;
 	TextButton startButton;
-	
-	
+
+	String welcome = "Escape and shoot comming enemies.\n\n"
+			+ "Movement: Left touchpad\n" + "Shoot: tap\n";
+
+	String credits = "Created by Guy Yogev";
+
 	public MainMenuScreen(MyGdxGame game) {
 		this.game = game;
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-		
-		//create table
-		table = new Table();
-		table.setFillParent(true);
-		table.center();
-		//add welcome message
-		Label text = new Label(message, Assets.defultSkin);
-		table.add(text).top().fill().pad(50).row();
-		//add start button
+
+		float blockWidth = Gdx.graphics.getWidth() / 4;
+		float blockHeigth = Gdx.graphics.getHeight() / 4;
+
+		// welcome message
+		Label text = new Label(welcome, Assets.defultSkin);
+		text.setPosition(blockWidth, 3 * blockHeigth);
+		stage.addActor(text);
 
 		startButton = new TextButton("START", Assets.defultSkin);
-		//startButton.pad(20);
-		table.add(startButton).fill().row();
-		
-		Label text2 = new Label("created by Guy Yogev", Assets.defultSkin);
-		table.add(text2).top().fill().pad(50).row();
-		//add table
-		stage.addActor(table);
+		startButton.setPosition(blockWidth, 1.5f * blockHeigth);
+		startButton.setSize(2 * blockWidth, 1.f * blockHeigth);
+		stage.addActor(startButton);
+
+		// credits
+		Label text2 = new Label(credits, Assets.defultSkin);
+		text2.setPosition(blockWidth, blockHeigth);
+		stage.addActor(text2);
 	}
 
 	@Override
@@ -50,8 +51,8 @@ public class MainMenuScreen extends MyScreen {
 		stage.draw();
 
 		if (startButton.isChecked()) {
-			//game.playScreen = new  PlayScreen(game);
-			game.setScreen(new  PlayScreen(game));
+			// game.playScreen = new PlayScreen(game);
+			game.setScreen(new PlayScreen(game));
 			dispose();
 		}
 	}

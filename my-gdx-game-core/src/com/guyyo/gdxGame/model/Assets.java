@@ -4,10 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+/*
+ * Game assets repository 
+ */
 public final class Assets {
 	// play screen size
 	public static float PLAY_SCREEN_WIDTH;
@@ -15,19 +20,26 @@ public final class Assets {
 	// moving camera boundaries
 	public static float MOVING_CAM_MIN_X, MOVING_CAM_MAX_X, MOVING_CAM_MIN_Y,
 			MOVING_CAM_MAX_Y;
+	
 	// Textures
 	public static Texture bg, badlogic, heroRun, hero2, enemy, shot,
 			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
-			blood_3, blood_4, blood_5;
+			blood_3, blood_4, blood_5, fireOrb;
+	
+	// drawables
+	public static Drawable fireButtonUp, fireButtonDown;
+	
 	// Skins
 	public static Skin defultSkin;
 	public static TouchpadStyle touchpadStyle;
+	
 	// sound
 	public static Sound shotSound, pistolEmpty, reload;
 	public static Music music;
 
+	//load assets to memory
 	public static void load() {
-
+		// parameters
 		PLAY_SCREEN_WIDTH = Gdx.graphics.getWidth() * 3;
 		PLAY_SCREEN_HEIGTH = Gdx.graphics.getHeight() * 3;
 
@@ -36,6 +48,7 @@ public final class Assets {
 		MOVING_CAM_MIN_Y = Gdx.graphics.getHeight() / 2;
 		MOVING_CAM_MAX_Y = PLAY_SCREEN_HEIGTH - Gdx.graphics.getHeight() / 2;
 
+		// images
 		bg = new Texture(Gdx.files.internal("bg1.png"));
 		badlogic = new Texture(Gdx.files.internal("badlogic.jpg"));
 		heroRun = new Texture(Gdx.files.internal("hero run.png"));
@@ -49,34 +62,37 @@ public final class Assets {
 		powerUps = new Texture(Gdx.files.internal("powerups.png"));
 		cow = new Texture(Gdx.files.internal("cowsheet.png"));
 		blood_1 = new Texture(Gdx.files.internal("blood_hit_01.png"));
-		//blood_2 = new Texture(Gdx.files.internal("blood_hit_02.png"));
+		// blood_2 = new Texture(Gdx.files.internal("blood_hit_02.png"));
 		blood_3 = new Texture(Gdx.files.internal("blood_hit_03.png"));
 		blood_4 = new Texture(Gdx.files.internal("blood_hit_04.png"));
 		blood_5 = new Texture(Gdx.files.internal("blood_hit_05.png"));
+		fireOrb = new Texture(Gdx.files.internal("fire orb.png"));
 
+		// sound
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/shot.wav"));
 		pistolEmpty = Gdx.audio.newSound(Gdx.files
 				.internal("sound/pistol empty.wav"));
 		reload = Gdx.audio.newSound(Gdx.files.internal("sound/reload.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("sound/loop.wav"));
 
+		// gui
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		Skin touchpadSkin = new Skin();
 
 		touchpadSkin.add("touchBackground",
-				new Texture(Gdx.files.internal("gui/touchpad bg.png")));
-		// Set knob image
+				new Texture(Gdx.files.internal("gui/touchpad bg 2.png")));
 		touchpadSkin.add("touchKnob",
-				new Texture(Gdx.files.internal("gui/touchpad knob.png")));
-		// Create TouchPad Style
+				new Texture(Gdx.files.internal("gui/touchpad knob 2.png")));
 		touchpadStyle = new TouchpadStyle();
-		// Create Drawable's from TouchPad skin
 		Drawable touchBackground = touchpadSkin.getDrawable("touchBackground");
 		Drawable touchKnob = touchpadSkin.getDrawable("touchKnob");
-		// Apply the Drawables to the TouchPad Style
 		touchpadStyle.background = touchBackground;
 		touchpadStyle.knob = touchKnob;
-		// Create new TouchPad with the created style
+
+		fireButtonUp = new TextureRegionDrawable(new TextureRegion(new Texture(
+				Gdx.files.internal("gui/fire button on.png"))));
+		fireButtonDown = new TextureRegionDrawable(new TextureRegion(
+				new Texture(Gdx.files.internal("gui/fire button off.png"))));
 
 	}
 }

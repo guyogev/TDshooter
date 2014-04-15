@@ -14,16 +14,20 @@ import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.BloodPool;
 import com.guyyo.gdxGame.model.CowPool;
 import com.guyyo.gdxGame.model.EnemyPool;
+import com.guyyo.gdxGame.model.FireOrb;
 import com.guyyo.gdxGame.model.Hero;
 import com.guyyo.gdxGame.model.Hud;
 import com.guyyo.gdxGame.model.PowerUpsPool;
 import com.guyyo.gdxGame.model.ShotPool;
 
+/*
+ * main game screen.
+ */
 public class PlayScreen extends MyScreen {
 
 	SpriteBatch batch;
-	Stage movingStage; // display game actors
-	FixedStage fixedStage; // display & handle game controls
+	Stage movingStage; // container for game actors
+	FixedStage fixedStage; // container for game controls
 	PlayScreenController playController; // game logic
 	// MyGestureController myGestureController; // Handles Gestures inputs
 	InputMultiplexer inputMultiplexer; // merge inputs from stages
@@ -34,6 +38,7 @@ public class PlayScreen extends MyScreen {
 	CowPool cowPool;
 	PowerUpsPool powerUpsPool;
 	BloodPool bloodPool;
+	FireOrb fireOrb;
 	Hud hud;
 
 	public PlayScreen(MyGdxGame game) {
@@ -54,25 +59,32 @@ public class PlayScreen extends MyScreen {
 		shotPool = new ShotPool();
 		for (Animation s : shotPool.getPool())
 			movingStage.addActor(s);
-		//powerUps
+		// powerUps
 		powerUpsPool = new PowerUpsPool();
 		for (Animation p : powerUpsPool.getPool())
 			movingStage.addActor(p);
-		//blood
+		// blood
 		bloodPool = new BloodPool();
 		for (Animation b : bloodPool.getPool())
 			movingStage.addActor(b);
+		// FX
+		fireOrb = new FireOrb();
+		movingStage.addActor(fireOrb);
+
 		// displayed controls
 		fixedStage = new FixedStage(inputMultiplexer, movingStage.getCamera(),
-				hero, enemyPool, shotPool);
+				hero, enemyPool, shotPool, fireOrb);
+
 		// displayed data
 		hud = new Hud();
 		fixedStage.addActor(hud);
+
 		// playController
 		playController = new PlayScreenController(game, hero, enemyPool,
-				shotPool, cowPool, powerUpsPool, bloodPool, hud);
+				shotPool, cowPool, powerUpsPool, bloodPool, fireOrb, hud);
 		inputMultiplexer.addProcessor(new GestureDetector(20, 0.5f, 2, 0.15f,
 				playController));
+
 		// GestureDetector
 		// myGestureController = new
 		// MyGestureController(movingStage.getCamera(),
@@ -80,6 +92,7 @@ public class PlayScreen extends MyScreen {
 
 		// inputMultiplexer.addProcessor(new GestureDetector(20, 0.5f, 2, 0.15f,
 		// myGestureController));
+		
 		// sound
 		Assets.music.setLooping(true);
 		Assets.music.setVolume(.5f);

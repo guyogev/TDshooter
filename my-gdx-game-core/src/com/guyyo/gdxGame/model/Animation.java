@@ -11,22 +11,35 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.guyyo.gdxGame.model.Hero.AnimState;
 
+/*
+ * Animated game objects.
+ */
 public abstract class Animation extends Actor {
+
+	// Animation are created only once reused as needed.
 	public static enum STATE {
 		SPAWN, ALIVE, DEAD
 	}
-	public static Random rand = new Random();
-	public STATE state;
 
-	Hashtable<AnimState, Integer> animHash;
+	public STATE state;
+	public static Random rand = new Random();
+
+	// images are held by 2d array, each row is an animated state sequence.
 	ArrayList<TextureRegion[]> frames = new ArrayList<TextureRegion[]>();
+
+	// function form an AnimState to an animated sequence.
+	Hashtable<AnimState, Integer> animHash;
+
 	float frameCol, speed;
 	int frameRow;
+	// Rectangles are used for easy collision detection
 	Rectangle rectangle;
 
 	public abstract void animate();
+
 	public abstract void spawn();
 
+	// default draw behavior
 	public void draw(TextureRegion t, Batch batch, float alpha) {
 		batch.draw(t, getX() - t.getRegionWidth() / 2,
 				getY() - t.getRegionHeight() / 2, getOriginX(), getOriginY(),
@@ -34,6 +47,8 @@ public abstract class Animation extends Actor {
 				getScaleY(), this.getRotation());
 	}
 
+	// load a spread sheet of size rows*cols images, into frames Array. you can
+	// load multiple sheets.
 	public void loadTexture(Texture t, int rows, int cols) {
 		TextureRegion[][] tmp = TextureRegion.split(t, t.getWidth() / cols,
 				t.getHeight() / rows);
@@ -47,6 +62,8 @@ public abstract class Animation extends Actor {
 		}
 	}
 
+	// use after loading images to frame Array.
+	// set the Actor size & origin parameters and gets ready for drawing.
 	public void initParams() {
 		frameRow = 0;
 		TextureRegion t = frames.get(frameRow)[0];
@@ -56,6 +73,7 @@ public abstract class Animation extends Actor {
 		rectangle = new Rectangle();
 	}
 
+	/* ********* getters ********* */
 	public TextureRegion getFrame(int frameRow) {
 		return frames.get(frameRow)[(int) frameCol];
 	}
@@ -63,7 +81,7 @@ public abstract class Animation extends Actor {
 	public float getSpeed() {
 		return speed;
 	}
-	
+
 	public float getCenterX() {
 		return getX() - getOriginX();
 	}
@@ -81,6 +99,7 @@ public abstract class Animation extends Actor {
 		return rectangle;
 	}
 
+	/* ********* state modifiers ********* */
 	public void kill() {
 		state = STATE.DEAD;
 	}
