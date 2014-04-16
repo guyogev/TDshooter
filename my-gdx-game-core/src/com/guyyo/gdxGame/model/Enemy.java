@@ -4,45 +4,38 @@ import java.util.Hashtable;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-public class Enemy extends Animation {
-	private static float minSpeed = 2;
+public abstract class Enemy extends Animation {
 	private static float minSpeedDelta = .01f;
+	private int WALK_FRAME_INDEX = 4, ATTACK_FRAME_INDEX = 12,
+			DIE_FRAME_INDEX = 22, SCENE_SIZE = 4;
 
-	enum AnimState {
-		UP, DOWN, LEFT, RIGHT
+	enum AnimDirection {
+		N, NE, NW, S, SE, SW, W, E
 	}
 
-	Hashtable<AnimState, Integer> animHash;
-	AnimState animState;
-
-	public Enemy(float sheet) {
-		animHash = new Hashtable<Enemy.AnimState, Integer>();
-		animHash.put(AnimState.DOWN, 0);
-		animHash.put(AnimState.UP, 1);
-		animHash.put(AnimState.LEFT, 2);
-		animHash.put(AnimState.RIGHT, 3);
-		if (sheet >= .5f)
-			loadTexture(Assets.enemy, 4, 11);
-		else 
-			loadTexture(Assets.enemy2, 4, 11);
-		initParams();
-		state = STATE.SPAWN;
-		speed = 3;
-		animState = AnimState.DOWN;
+	enum AnimBehavior {
+		WALK, ATTACK, STAND
 	}
+
+	Hashtable<AnimDirection, Integer> animHash;
+	AnimDirection animDirection;
+	AnimBehavior animBehavior;
+	float minSpeed;
 
 	public void draw(Batch batch, float alpha) {
 		if (state != STATE.SPAWN)
-			super.draw(getFrame(animHash.get(animState)), batch, alpha);
+			super.draw(getFrame(animHash.get(animDirection)), batch, alpha);
 	}
 
 	public void animate() {
-		if (state == STATE.ALIVE)
-			frameCol = (frameCol + .1f) % 6; // TODO after frame 6 is dead
-												// animation
-		else if (state == STATE.DEAD) {
-			frameCol += .3;
-			if (frameCol >= getRowLength(animHash.get(animState)) - 1)
+		if (state == STATE.ALIVE) {
+			if (animBehavior == AnimBehavior.WALK)
+				frameCol = WALK_FRAME_INDEX + (frameCol + .1f) % SCENE_SIZE;
+			else if (animBehavior == AnimBehavior.ATTACK)
+				frameCol = ATTACK_FRAME_INDEX + (frameCol + .1f) % SCENE_SIZE;
+		} else if (state == STATE.DEAD) {
+			frameCol += .1;
+			if (frameCol >= getRowLength(animHash.get(animDirection)) - 1)
 				state = STATE.SPAWN;
 		}
 	}
@@ -56,19 +49,54 @@ public class Enemy extends Animation {
 		minSpeed += minSpeedDelta;
 	}
 
-	public void faceRight() {
-		animState = AnimState.RIGHT;
+	@Override
+	public void kill() {
+		frameCol = DIE_FRAME_INDEX;
+		state = STATE.DEAD;
+		//.Assets.bones.play(.5f);
 	}
 
-	public void faceLeft() {
-		animState = AnimState.LEFT;
+	public void walk() {
+		animBehavior = AnimBehavior.WALK;
 	}
 
-	public void faceUp() {
-		animState = AnimState.UP;
+	public void attack() {
+		animBehavior = AnimBehavior.ATTACK;
 	}
 
-	public void faceDown() {
-		animState = AnimState.DOWN;
+	public void faceNorth() {
+		animDirection = AnimDirection.N;
+	}
+
+	public void faceSouth() {
+		animDirection = AnimDirection.S;
+	}
+
+	public void faceWest() {
+		animDirection = AnimDirection.W;
+	}
+
+	public void faceEast() {
+		animDirection = AnimDirection.E;
+	}
+
+	public void faceNorthEast() {
+		animDirection = AnimDirection.NE;
+	}
+
+	public void faceNorthWest() {
+		animDirection = AnimDirection.NW;
+	}
+
+	public void faceSouthWest() {
+		animDirection = AnimDirection.SW;
+	}
+
+	public void faceSouthEast() {
+		animDirection = AnimDirection.SE;
+	}
+
+	public boolean isWalking() {
+		return animBehavior == AnimBehavior.WALK;
 	}
 }

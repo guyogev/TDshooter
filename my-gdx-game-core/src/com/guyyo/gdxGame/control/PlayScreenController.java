@@ -74,16 +74,28 @@ public class PlayScreenController implements GestureListener {
 				double sin = Math.sin(deg);
 				e.moveBy((float) (e.getSpeed() * cos),
 						(float) (e.getSpeed() * sin));
-				// change animation
-				if (sin / cos <= 0)
-					if (cos >= 0)
-						((Enemy) e).faceRight();
-					else
-						((Enemy) e).faceLeft();
-				else if (sin >= 0)
-					((Enemy) e).faceUp();
-				else
-					((Enemy) e).faceDown();
+				// change animation direction
+				if (((Enemy) e).isWalking())
+					if (deg >= 0) {
+						if (deg < Math.PI / 8)
+							((Enemy) e).faceEast();
+						else if (deg < 3 * Math.PI / 8)
+							((Enemy) e).faceNorthEast();
+						else if (deg < 5 * Math.PI / 8)
+							((Enemy) e).faceNorth();
+						else
+							((Enemy) e).faceNorthWest();
+					} else {
+						if (-deg < Math.PI / 8)
+							((Enemy) e).faceEast();
+						else if (-deg < 3 * Math.PI / 8)
+							((Enemy) e).faceSouthEast();
+						else if (-deg < 5 * Math.PI / 8)
+							((Enemy) e).faceSouth();
+						else
+							((Enemy) e).faceSouthWest();
+					}
+
 				// Collisions
 				detectHeroEnemyCollisions((Enemy) e);
 				e.animate();
@@ -137,11 +149,13 @@ public class PlayScreenController implements GestureListener {
 	private void detectHeroEnemyCollisions(Enemy e) {
 		if (colliding(hero, e)) {
 			hero.decreaseHp();
+			e.attack();
 			if (fireOrb.state == STATE.ALIVE) {
 				e.kill();
 				hud.incScore();
 			}
-		}
+		} else
+			e.walk();
 	}
 
 	private void detectShotEnemyCollisions(Shot s) {

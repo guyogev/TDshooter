@@ -28,7 +28,7 @@ public class Hero extends Animation {
 		animState = AnimState.RUNNING;
 		setX(Gdx.graphics.getWidth() / 2);
 		setY(Gdx.graphics.getHeight() / 2);
-		setScale(1.5f);
+		//setScale(1.5f);
 		speed = 8;
 		shotsLeft = 10;
 		hp = 100;
@@ -76,7 +76,7 @@ public class Hero extends Animation {
 	}
 
 	public void decreaseHp() {
-		hp -= .2;
+		//hp -= .2;
 		if (hp <= 0)
 			kill();
 	}

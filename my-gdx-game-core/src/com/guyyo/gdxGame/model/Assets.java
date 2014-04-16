@@ -20,24 +20,25 @@ public final class Assets {
 	// moving camera boundaries
 	public static float MOVING_CAM_MIN_X, MOVING_CAM_MAX_X, MOVING_CAM_MIN_Y,
 			MOVING_CAM_MAX_Y;
-	
+
 	// Textures
 	public static Texture bg, badlogic, heroRun, hero2, enemy, shot,
 			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
-			blood_3, blood_4, blood_5, fireOrb;
-	
+			blood_3, blood_4, blood_5, fireOrb, skeletonOccultist,
+			skeletonMage, skeletonKnight;
+
 	// drawables
 	public static Drawable fireButtonUp, fireButtonDown;
-	
+
 	// Skins
 	public static Skin defultSkin;
 	public static TouchpadStyle touchpadStyle;
-	
+
 	// sound
-	public static Sound shotSound, pistolEmpty, reload;
+	public static Sound shotSound, pistolEmpty, reload,bones;
 	public static Music music;
 
-	//load assets to memory
+	// load assets to memory
 	public static void load() {
 		// parameters
 		PLAY_SCREEN_WIDTH = Gdx.graphics.getWidth() * 3;
@@ -67,14 +68,20 @@ public final class Assets {
 		blood_4 = new Texture(Gdx.files.internal("blood_hit_04.png"));
 		blood_5 = new Texture(Gdx.files.internal("blood_hit_05.png"));
 		fireOrb = new Texture(Gdx.files.internal("fire orb.png"));
-
+		skeletonOccultist = new Texture(
+				Gdx.files.internal("enemy/skeleton_occultist.png"));
+		skeletonMage = new Texture(
+				Gdx.files.internal("enemy/skeleton_mage.png"));
+		skeletonKnight = new Texture(
+				Gdx.files.internal("enemy/skeleton_knight.png"));
 		// sound
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/shot.wav"));
 		pistolEmpty = Gdx.audio.newSound(Gdx.files
 				.internal("sound/pistol empty.wav"));
 		reload = Gdx.audio.newSound(Gdx.files.internal("sound/reload.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("sound/loop.wav"));
-
+		bones = Gdx.audio.newSound(Gdx.files.internal("sound/bones.wav"));
+		
 		// gui
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		Skin touchpadSkin = new Skin();
