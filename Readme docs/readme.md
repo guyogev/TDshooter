@@ -1,8 +1,8 @@
 TDshooter
 =========
 
-This is my pet project. The main goal is to get hands-on experience.
-The idea is a 'Diablo' looking game, using open source resources.
+This is my pet project. The main goal is to get hands-on experience.			
+The idea is a 'Diablo' looking game, using open source resources.		
 
 current version is available for download:  
 apk: https://dl.dropboxusercontent.com/u/6869994/my-gdx-game-android.apk  
