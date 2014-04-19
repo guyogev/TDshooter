@@ -17,7 +17,7 @@ Holds the game data (sprite classes and source files).
 the Modal just holds the data, it can not change it or access the other sections. 		
 
 ###View:	
-Display the Model to screen. the View cannot change inform Control if changes are needed.	
+Display the Model to screen. the View inform Control if changes are needed.	
 
 ###Control:	
 The game logic. access other sections and update the game objects state.

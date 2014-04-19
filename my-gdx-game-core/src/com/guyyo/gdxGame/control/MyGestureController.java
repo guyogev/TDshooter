@@ -33,19 +33,7 @@ public class MyGestureController implements GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		System.out.println(hero.getRelX());
-		double rad = Math.atan2(x - hero.getRelX(), hero.getRelY() - y);
-		double deg = rad * 180 / Math.PI;
-		hero.setRotation(-deg);
-		if (hero.canFire()) {
-			hero.fire();
-			float dy = (float) (Shot.speed * Math.cos(rad));
-			float dx = (float) (Shot.speed * Math.sin(rad));
-			shotPool.spawn(hero.getX(), hero.getY(), dx, dy, deg);
-			Assets.shotSound.play();
-		}
-		else if (!hero.isReloading())
-			Assets.pistolEmpty.play();
+
 		return true;
 	}
 

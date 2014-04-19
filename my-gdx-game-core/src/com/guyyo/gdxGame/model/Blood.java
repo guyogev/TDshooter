@@ -28,7 +28,7 @@ public class Blood extends Animation {
 	@Override
 	//Animate only once.
 	public void animate() {
-		if (state == STATE.ALIVE) {
+		if (state == STATE.IN_USE) {
 			if (frameCol >= (getRowLength((int) frameRow) - 1)) {
 				state = STATE.SPAWN;
 				frameCol = 0;
@@ -39,7 +39,7 @@ public class Blood extends Animation {
 
 	public void spawn(float x, float y) {
 		setPosition(x, y);
-		state = STATE.ALIVE;
+		state = STATE.IN_USE;
 	}
 
 	@Override

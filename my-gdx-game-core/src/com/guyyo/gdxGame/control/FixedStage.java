@@ -19,15 +19,15 @@ import com.guyyo.gdxGame.model.ShotPool;
  * FixedStage process buttons input
  */
 public class FixedStage extends Stage implements InputProcessor {
-	
+
 	Camera cam;
-	
-	//hero movement controller
+
+	// hero movement controller
 	Touchpad touchpad;
-	
+
 	TextButton reloadButton;
 	ImageButton fireButton;
-	
+
 	Hero hero;
 	EnemyPool enemyPool;
 	ShotPool shotpool;
@@ -45,8 +45,8 @@ public class FixedStage extends Stage implements InputProcessor {
 		reloadButton.setBounds(Gdx.graphics.getWidth() - 100, 15, 70, 70);
 		addActor(reloadButton);
 
-		fireButton = new ImageButton(Assets.fireButtonUp, Assets.fireButtonDown,
-				Assets.fireButtonDown);
+		fireButton = new ImageButton(Assets.fireButtonUp,
+				Assets.fireButtonDown, Assets.fireButtonDown);
 		fireButton.setPosition(Gdx.graphics.getWidth() - 200, 45);
 		fireButton.setChecked(false);
 		addActor(fireButton);
@@ -62,13 +62,12 @@ public class FixedStage extends Stage implements InputProcessor {
 	public void processInput() {
 		float x, y;
 		// hero & camera movement
-		if (touchpad.isTouched()) {
-			// hero rotation
-			if (hero.isShooting()) {
+		if (touchpad.isTouched() && !hero.isBehaviorLocked()) {
+			if (!hero.isRunning())
 				hero.run();
-			}// TODO fix rotation degrees
-			hero.setRotation((-Math.atan2(touchpad.getKnobPercentX(),
-					touchpad.getKnobPercentY()) * 180 / Math.PI));
+			// hero direction
+			hero.setDirection(Math.atan2(touchpad.getKnobPercentY(),
+					touchpad.getKnobPercentX()));
 			// hero position
 			x = hero.getX() + hero.getSpeed() * touchpad.getKnobPercentX();
 			y = hero.getY() + hero.getSpeed() * touchpad.getKnobPercentY();
@@ -92,24 +91,25 @@ public class FixedStage extends Stage implements InputProcessor {
 				cam.position.x = hero.getX();
 			if (y >= Assets.MOVING_CAM_MIN_Y && y <= Assets.MOVING_CAM_MAX_Y)
 				cam.position.y = hero.getY();
-		} else if (!hero.isReloading())
+		} else if (!hero.isStanding() && !hero.isBehaviorLocked())
 			hero.stand();
 
 		// reload button
-		if (reloadButton.isChecked() && !hero.isReloading()) {
-			hero.reload();
-			Assets.reload.play();
-			reloadButton.setChecked(false);
-		}
+		/*
+		 * if (reloadButton.isChecked() && !hero.isReloading()) { hero.reload();
+		 * Assets.reload.play(); reloadButton.setChecked(false); }
+		 */
 		
-		//fire button
-		if (hero.hasPowerUps() && fireButton.isDisabled()){
+		// fire button
+		if (hero.hasPowerUps() && fireButton.isDisabled()) {
 			fireButton.setDisabled(false);
 			fireButton.setChecked(false);
 		}
 		if (!fireButton.isDisabled() && fireButton.isChecked()) {
 			System.out.println("fireorb");
 			fireOrb.spawn();
+			Assets.fireFX.play();
+			hero.castSpell();
 			hero.decPowerUps();
 			fireButton.setDisabled(true);
 		}

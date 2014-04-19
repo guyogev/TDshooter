@@ -17,7 +17,7 @@ public class PowerUp extends Animation {
 
 	@Override
 	public void animate() {
-		if (state == STATE.ALIVE) {
+		if (state == STATE.IN_USE) {
 			frameCol = (frameCol + .1f)
 					% (getRowLength((int) frameRow) - 1);
 		}
@@ -28,6 +28,6 @@ public class PowerUp extends Animation {
 		float x = rand.nextFloat();
 		setPosition(x * Assets.PLAY_SCREEN_WIDTH, rand.nextFloat()
 				* Assets.PLAY_SCREEN_HEIGTH);
-		state = STATE.ALIVE;
+		state = STATE.IN_USE;
 	}
 }

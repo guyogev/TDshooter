@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.guyyo.gdxGame.model.Hero.AnimState;
 
 /*
  * Animated game objects.
@@ -18,8 +17,15 @@ public abstract class Animation extends Actor {
 
 	// Animation are created only once reused as needed.
 	public static enum STATE {
-		SPAWN, ALIVE, DEAD
+		SPAWN, IN_USE, FREE
 	}
+
+	enum AnimDirection {
+		N, NE, NW, S, SE, SW, W, E
+	}
+
+	Hashtable<AnimDirection, Integer> animHash;
+	AnimDirection animDirection;
 
 	public STATE state;
 	public static Random rand = new Random();
@@ -27,11 +33,9 @@ public abstract class Animation extends Actor {
 	// images are held by 2d array, each row is an animated state sequence.
 	ArrayList<TextureRegion[]> frames = new ArrayList<TextureRegion[]>();
 
-	// function form an AnimState to an animated sequence.
-	Hashtable<AnimState, Integer> animHash;
-
-	float frameCol, speed;
+	float speed, animDelta = .1f;
 	int frameRow;
+	double frameCol, sceneIndex;
 	// Rectangles are used for easy collision detection
 	Rectangle rectangle;
 
@@ -68,14 +72,48 @@ public abstract class Animation extends Actor {
 		frameRow = 0;
 		TextureRegion t = frames.get(frameRow)[0];
 		setOrigin(t.getRegionWidth() / 2, t.getRegionHeight() / 2);
-		setWidth(t.getRegionWidth());
-		setHeight(t.getRegionHeight());
+		setWidth(t.getRegionWidth()/2);
+		setHeight(t.getRegionHeight()/2);
 		rectangle = new Rectangle();
+	}
+
+	public void setDirection(double deg) {
+		if (deg >= 0) {
+			if (deg < Math.PI / 8)
+				faceEast();
+			else if (deg < 3 * Math.PI / 8)
+				faceNorthEast();
+			else if (deg < 5 * Math.PI / 8)
+				faceNorth();
+			else if (deg < 7 * Math.PI / 8)
+				faceNorthWest();
+			else 
+				faceWest();
+		} else {
+			if (-deg < Math.PI / 8)
+				faceEast();
+			else if (-deg < 3 * Math.PI / 8)
+				faceSouthEast();
+			else if (-deg < 5 * Math.PI / 8)
+				faceSouth();
+			else if (-deg < 7 * Math.PI / 8)
+				faceSouthWest();
+			else 
+				faceWest();
+		}
+	}
+	
+	public void setDirection(AnimDirection dirc) {
+		animDirection = dirc;
 	}
 
 	/* ********* getters ********* */
 	public TextureRegion getFrame(int frameRow) {
 		return frames.get(frameRow)[(int) frameCol];
+	}
+
+	public AnimDirection getAnimDirection() {
+		return animDirection;
 	}
 
 	public float getSpeed() {
@@ -101,6 +139,40 @@ public abstract class Animation extends Actor {
 
 	/* ********* state modifiers ********* */
 	public void kill() {
-		state = STATE.DEAD;
+		state = STATE.FREE;
 	}
+
+	public void faceNorth() {
+		animDirection = AnimDirection.N;
+	}
+
+	public void faceSouth() {
+		animDirection = AnimDirection.S;
+	}
+
+	public void faceWest() {
+		animDirection = AnimDirection.W;
+	}
+
+	public void faceEast() {
+		animDirection = AnimDirection.E;
+	}
+
+	public void faceNorthEast() {
+		animDirection = AnimDirection.NE;
+	}
+
+	public void faceNorthWest() {
+		animDirection = AnimDirection.NW;
+	}
+
+	public void faceSouthWest() {
+		animDirection = AnimDirection.SW;
+	}
+
+	public void faceSouthEast() {
+		animDirection = AnimDirection.SE;
+	}
+
+
 }

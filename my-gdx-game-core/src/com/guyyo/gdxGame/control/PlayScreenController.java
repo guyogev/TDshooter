@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Animation.STATE;
-import com.guyyo.gdxGame.model.Hero.AnimState;
 import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.BloodPool;
 import com.guyyo.gdxGame.model.CowPool;
@@ -54,67 +53,44 @@ public class PlayScreenController implements GestureListener {
 	public void update() {
 
 		// hero
-		if (hero.state == STATE.DEAD) {
+		if (hero.state == STATE.FREE) {
 			Assets.music.stop();
 			game.setScreen(new GameOverScreen(game));
 			// game.playScreen.dispose();
 		}
-		if (hero.animState == AnimState.RELOADING)
-			hero.checkDoneReloading();
-		if (hero.isRunning())
-			hero.animate();
+		hero.animate();
 
 		// enemies
 		for (Animation e : enemyPool.getPool()) {
-			if (e.state == STATE.ALIVE) {
-				float x = hero.getCenterX() - e.getCenterX();
-				float y = hero.getCenterY() - e.getCenterY();
-				double deg = Math.atan2(y, x);
-				double cos = Math.cos(deg);
-				double sin = Math.sin(deg);
-				e.moveBy((float) (e.getSpeed() * cos),
-						(float) (e.getSpeed() * sin));
-				// change animation direction
-				if (((Enemy) e).isWalking())
-					if (deg >= 0) {
-						if (deg < Math.PI / 8)
-							((Enemy) e).faceEast();
-						else if (deg < 3 * Math.PI / 8)
-							((Enemy) e).faceNorthEast();
-						else if (deg < 5 * Math.PI / 8)
-							((Enemy) e).faceNorth();
-						else
-							((Enemy) e).faceNorthWest();
-					} else {
-						if (-deg < Math.PI / 8)
-							((Enemy) e).faceEast();
-						else if (-deg < 3 * Math.PI / 8)
-							((Enemy) e).faceSouthEast();
-						else if (-deg < 5 * Math.PI / 8)
-							((Enemy) e).faceSouth();
-						else
-							((Enemy) e).faceSouthWest();
-					}
-
+			if (e.state == STATE.IN_USE) {
+				// move
+				if (((Enemy) e).isWalking()) {
+					double deg = Math.atan2(hero.getCenterY() - e.getCenterY(),
+							hero.getCenterX() - e.getCenterX());
+					double cos = Math.cos(deg);
+					double sin = Math.sin(deg);
+					e.moveBy((float) (e.getSpeed() * cos),
+							(float) (e.getSpeed() * sin));
+					e.setDirection(deg);
+				}
 				// Collisions
-				detectHeroEnemyCollisions((Enemy) e);
+				if (!((Enemy) e).isBehaviorLocked())
+					detectHeroEnemyCollisions((Enemy) e);
 				e.animate();
-			} else if (e.state == STATE.DEAD)
-				e.animate();
-			else
-				e.spawn();
+			} // else
+				// e.spawn();
 		}
 
 		// shots
 		for (Animation s : shotPool.getPool())
-			if (s.state == STATE.ALIVE) {
+			if (s.state == STATE.IN_USE) {
 				s.animate();
 				detectShotEnemyCollisions((Shot) s);
 			}
 
 		// powerUps
 		for (Animation p : powerUpPool.getPool())
-			if (p.state == STATE.ALIVE) {
+			if (p.state == STATE.IN_USE) {
 				p.animate();
 				if (colliding(hero, p) && !hero.hasPowerUps()) {
 					hero.incPowerUp();
@@ -124,13 +100,13 @@ public class PlayScreenController implements GestureListener {
 
 		// blood
 		for (Animation b : bloodPool.getPool())
-			if (b.state == STATE.ALIVE) {
+			if (b.state == STATE.IN_USE) {
 				b.animate();
 			}
 
 		// FX
-		if (fireOrb.state == STATE.ALIVE) {
-			fireOrb.setPosition(hero.getX(), hero.getY());
+		if (fireOrb.state == STATE.IN_USE) {
+			fireOrb.setPosition(hero.getX(), hero.getY() + 10);
 			fireOrb.animate();
 		}
 
@@ -148,24 +124,28 @@ public class PlayScreenController implements GestureListener {
 
 	private void detectHeroEnemyCollisions(Enemy e) {
 		if (colliding(hero, e)) {
-			hero.decreaseHp();
-			e.attack();
-			if (fireOrb.state == STATE.ALIVE) {
-				e.kill();
-				hud.incScore();
+			if (!hero.isBehaviorLocked()) {
+				if (hero.decreaseHp())
+					hero.die();
+				if (!e.isAttacking())
+					e.attack();
+				if (fireOrb.state == STATE.IN_USE) {
+					e.die();
+					hud.incScore();
+				}
 			}
-		} else
+		} else if (!e.isWalking())
 			e.walk();
 	}
 
 	private void detectShotEnemyCollisions(Shot s) {
 		for (Animation e : enemyPool.getPool())
-			if (e.state == STATE.ALIVE) {
+			if (e.state == STATE.IN_USE) {
 				if (colliding(e, s)) {
 					bloodPool.spawn(e.getCenterX() + e.getOriginX(),
 							e.getCenterY());
 					s.kill();
-					e.kill();
+					((Enemy) e).die();
 					hud.incScore();
 					break;
 				}
@@ -182,23 +162,9 @@ public class PlayScreenController implements GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		System.out.println("tapped at x=" + x + " y=" + y);
-		System.out.println("hero at x=" + hero.getX() + " y=" + hero.getY());
-		System.out.println("hero relative at x=" + hero.getRelX() + " y="
-				+ hero.getRelY());
-		double rad = Math.atan2(x - hero.getRelX(), hero.getRelY() - y);
-		double deg = rad * 180 / Math.PI;
-		// hero
-		hero.setRotation(-deg);
-		// shots
-		if (hero.canFire()) {
-			hero.fire();
-			float dy = (float) (Shot.speed * Math.cos(rad));
-			float dx = (float) (Shot.speed * Math.sin(rad));
-			shotPool.spawn(hero.getX(), hero.getY(), dx, dy, deg);
-			Assets.shotSound.play();
-		} else if (!hero.isReloading())
-			Assets.pistolEmpty.play();
+		hero.attack2();
+		shotPool.spawn(hero.getX(), hero.getY(), hero.getAnimDirection());
+		Assets.shotSound.play();
 		return true;
 	}
 
@@ -210,8 +176,17 @@ public class PlayScreenController implements GestureListener {
 
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) {
-		// TODO Auto-generated method stub
-		return false;
+		hero.attack();
+		int power = (int) velocityY /800;
+		for (Animation e : enemyPool.getPool()) {
+			if (power > 0 && colliding(hero,e) && !((Enemy) e).isDying()){
+				((Enemy) e).die();
+				if (--power <= 0 )
+					break;
+			}
+		}
+		Assets.axe.play();
+		return true;
 	}
 
 	@Override

@@ -5,6 +5,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -35,14 +38,22 @@ public final class Assets {
 	public static TouchpadStyle touchpadStyle;
 
 	// sound
-	public static Sound shotSound, pistolEmpty, reload,bones;
+	public static Sound shotSound, pistolEmpty, reload, bones, fireFX, axe;
 	public static Music music;
+
+	// tile maps
+	public static TiledMap tileMap;
 
 	// load assets to memory
 	public static void load() {
+		tileMap = new TmxMapLoader().load("maps/tilemap.tmx");
+		MapProperties prop = tileMap.getProperties();
+
 		// parameters
-		PLAY_SCREEN_WIDTH = Gdx.graphics.getWidth() * 3;
-		PLAY_SCREEN_HEIGTH = Gdx.graphics.getHeight() * 3;
+		PLAY_SCREEN_WIDTH = prop.get("width", Integer.class)
+				* prop.get("tilewidth", Integer.class)/2;
+		PLAY_SCREEN_HEIGTH = prop.get("height", Integer.class)
+				* prop.get("tileheight", Integer.class)/2;
 
 		MOVING_CAM_MIN_X = Gdx.graphics.getWidth() / 2;
 		MOVING_CAM_MAX_X = PLAY_SCREEN_WIDTH - Gdx.graphics.getWidth() / 2;
@@ -52,13 +63,13 @@ public final class Assets {
 		// images
 		bg = new Texture(Gdx.files.internal("bg1.png"));
 		badlogic = new Texture(Gdx.files.internal("badlogic.jpg"));
-		heroRun = new Texture(Gdx.files.internal("hero run.png"));
+		heroRun = new Texture(Gdx.files.internal("hero/orc_elite.png"));
 		heroPistol = new Texture(Gdx.files.internal("hero pistol.png"));
 		heroPistolReload = new Texture(
 				Gdx.files.internal("hero pistol reload.png"));
 		enemy = new Texture(Gdx.files.internal("enemy.png"));
 		enemy2 = new Texture(Gdx.files.internal("player.png"));
-		shot = new Texture(Gdx.files.internal("shot2.png"));
+		shot = new Texture(Gdx.files.internal("fireball.png"));
 		hero2 = new Texture(Gdx.files.internal("hero2.png"));
 		powerUps = new Texture(Gdx.files.internal("powerups.png"));
 		cow = new Texture(Gdx.files.internal("cowsheet.png"));
@@ -75,13 +86,16 @@ public final class Assets {
 		skeletonKnight = new Texture(
 				Gdx.files.internal("enemy/skeleton_knight.png"));
 		// sound
-		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/shot.wav"));
+		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/foom_0.wav"));
+		fireFX = Gdx.audio.newSound(Gdx.files
+				.internal("sound/fire_crackling 2.mp3"));
 		pistolEmpty = Gdx.audio.newSound(Gdx.files
 				.internal("sound/pistol empty.wav"));
 		reload = Gdx.audio.newSound(Gdx.files.internal("sound/reload.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("sound/loop.wav"));
 		bones = Gdx.audio.newSound(Gdx.files.internal("sound/bones.wav"));
-		
+		axe = Gdx.audio.newSound(Gdx.files.internal("sound/axe.wav"));
+
 		// gui
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		Skin touchpadSkin = new Skin();

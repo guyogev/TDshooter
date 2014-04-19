@@ -13,8 +13,11 @@ public class MainMenuScreen extends MyScreen {
 	Stage stage;
 	TextButton startButton;
 
-	String welcome = "Escape and shoot comming enemies.\n\n"
-			+ "Movement: Left touchpad\n" + "Shoot: tap\n";
+	String welcome = "\nEscape and shoot comming enemies.\n\n"
+			+ "Use the left touchpad to move around.\n"
+			+ "Tap anywhere to Shoot fire balls.\n"
+			+ "Swipe up/down to use the axe. the faster you swipe the harder your attack.\n "
+			+ "Enjoy\n";
 
 	String credits = "Created by Guy Yogev";
 

@@ -6,20 +6,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 public abstract class Enemy extends Animation {
 	private static float minSpeedDelta = .01f;
-	private int WALK_FRAME_INDEX = 4, ATTACK_FRAME_INDEX = 12,
+
+	int STAND_FRAME_INDEX = 0, WALK_FRAME_INDEX = 4, ATTACK_FRAME_INDEX = 12,
 			DIE_FRAME_INDEX = 22, SCENE_SIZE = 4;
 
-	enum AnimDirection {
-		N, NE, NW, S, SE, SW, W, E
-	}
-
 	enum AnimBehavior {
-		WALK, ATTACK, STAND
+		WALK, ATTACK, STAND, DIE, REST
 	}
 
 	Hashtable<AnimDirection, Integer> animHash;
-	AnimDirection animDirection;
 	AnimBehavior animBehavior;
+	boolean behaviorLocked = false;
 	float minSpeed;
 
 	public void draw(Batch batch, float alpha) {
@@ -28,15 +25,43 @@ public abstract class Enemy extends Animation {
 	}
 
 	public void animate() {
-		if (state == STATE.ALIVE) {
-			if (animBehavior == AnimBehavior.WALK)
-				frameCol = WALK_FRAME_INDEX + (frameCol + .1f) % SCENE_SIZE;
-			else if (animBehavior == AnimBehavior.ATTACK)
-				frameCol = ATTACK_FRAME_INDEX + (frameCol + .1f) % SCENE_SIZE;
-		} else if (state == STATE.DEAD) {
-			frameCol += .1;
-			if (frameCol >= getRowLength(animHash.get(animDirection)) - 1)
-				state = STATE.SPAWN;
+		if (state == STATE.IN_USE) {
+			switch (animBehavior) {
+			case STAND:
+				sceneIndex = (sceneIndex + animDelta) % SCENE_SIZE;
+				frameCol = STAND_FRAME_INDEX + sceneIndex;
+				break;
+			case REST:
+				sceneIndex = sceneIndex + animDelta;
+				frameCol = STAND_FRAME_INDEX + sceneIndex;
+				if (sceneIndex >= SCENE_SIZE) {
+					unLockBehavior();
+					stand();
+				}
+				break;
+			case WALK:
+				sceneIndex = (sceneIndex + animDelta) % SCENE_SIZE;
+				frameCol = WALK_FRAME_INDEX + sceneIndex;
+				break;
+			case ATTACK:
+				sceneIndex = sceneIndex + animDelta;
+				frameCol = ATTACK_FRAME_INDEX + sceneIndex;
+				if (sceneIndex >= SCENE_SIZE)
+					rest();
+				break;
+			case DIE:
+				sceneIndex = sceneIndex + animDelta;
+				frameCol = DIE_FRAME_INDEX + sceneIndex;
+				if (sceneIndex >= SCENE_SIZE) {
+					spawn();
+					unLockBehavior();
+				}
+				break;
+
+			default:
+				break;
+			}
+
 		}
 	}
 
@@ -44,59 +69,66 @@ public abstract class Enemy extends Animation {
 		float x = rand.nextFloat();
 		setPosition(x * Assets.PLAY_SCREEN_WIDTH, rand.nextFloat()
 				* Assets.PLAY_SCREEN_HEIGTH);
-		speed = minSpeed + rand.nextInt(3);
-		state = STATE.ALIVE;
+		speed = minSpeed + rand.nextFloat();
+		state = STATE.IN_USE;
 		minSpeed += minSpeedDelta;
+		walk();
 	}
 
-	@Override
-	public void kill() {
-		frameCol = DIE_FRAME_INDEX;
-		state = STATE.DEAD;
-		//.Assets.bones.play(.5f);
+	public void lockBehavior() {
+		behaviorLocked = true;
+
+	}
+
+	public void unLockBehavior() {
+		behaviorLocked = false;
+
+	}
+
+	private void stand() {
+		animBehavior = AnimBehavior.STAND;
+		sceneIndex = 0;
+	}
+
+	private void rest() {
+		animBehavior = AnimBehavior.REST;
+		sceneIndex = 0;
 	}
 
 	public void walk() {
 		animBehavior = AnimBehavior.WALK;
+		sceneIndex = 0;
 	}
 
 	public void attack() {
 		animBehavior = AnimBehavior.ATTACK;
+		sceneIndex = 0;
+		lockBehavior();
 	}
 
-	public void faceNorth() {
-		animDirection = AnimDirection.N;
-	}
-
-	public void faceSouth() {
-		animDirection = AnimDirection.S;
-	}
-
-	public void faceWest() {
-		animDirection = AnimDirection.W;
-	}
-
-	public void faceEast() {
-		animDirection = AnimDirection.E;
-	}
-
-	public void faceNorthEast() {
-		animDirection = AnimDirection.NE;
-	}
-
-	public void faceNorthWest() {
-		animDirection = AnimDirection.NW;
-	}
-
-	public void faceSouthWest() {
-		animDirection = AnimDirection.SW;
-	}
-
-	public void faceSouthEast() {
-		animDirection = AnimDirection.SE;
+	public void die() {
+		if (!isDying()) {
+			frameCol = DIE_FRAME_INDEX;
+			animBehavior = AnimBehavior.DIE;
+			sceneIndex = 0;
+			lockBehavior();
+		}
 	}
 
 	public boolean isWalking() {
 		return animBehavior == AnimBehavior.WALK;
 	}
+
+	public boolean isAttacking() {
+		return animBehavior == AnimBehavior.ATTACK;
+	}
+
+	public boolean isDying() {
+		return animBehavior == AnimBehavior.DIE;
+	}
+
+	public boolean isBehaviorLocked() {
+		return behaviorLocked;
+	}
+
 }

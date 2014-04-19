@@ -18,7 +18,7 @@ public class FireOrb extends Animation {
 
 	@Override
 	public void animate() {
-		if (state == STATE.ALIVE) {
+		if (state == STATE.IN_USE) {
 			if (frameCol >= (getRowLength((int) frameRow) - 1)) {
 				if (frameRow >= (getRowLength((int) frameRow) - 1)) {
 					state = STATE.SPAWN;
@@ -33,7 +33,7 @@ public class FireOrb extends Animation {
 
 	@Override
 	public void spawn() {
-		state = STATE.ALIVE;
+		state = STATE.IN_USE;
 		frameCol = 0;
 		frameRow = 0;
 

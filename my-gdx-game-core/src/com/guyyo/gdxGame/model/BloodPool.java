@@ -21,7 +21,7 @@ public class BloodPool extends AnimationsPool {
 			if (b.state == STATE.SPAWN) {
 				b.setX(x);
 				b.setY(y);
-				b.state = STATE.ALIVE;
+				b.state = STATE.IN_USE;
 				break;
 			}
 			j++;
