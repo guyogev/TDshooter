@@ -9,9 +9,9 @@ import com.guyyo.gdxGame.model.Animation.STATE;
  * Animation are created only once reused as needed.
  */
 public abstract class AnimationsPool {
-	int size = 5;
+	int size;
 	ArrayList<Animation> pool;
-	static Random rand = new Random();;
+	static Random rand = new Random();
 	
 	public void spawn() {
 		for (Animation a : pool) {

@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import com.guyyo.gdxGame.model.Animation.STATE;
 
 public class BloodPool extends AnimationsPool {
-	public BloodPool() {
+	
+	public  BloodPool() {
 		size = 10;
 		pool = new ArrayList<Animation>(size);
 		for (int i = 0; i < size; i++)

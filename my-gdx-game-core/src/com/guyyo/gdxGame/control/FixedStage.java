@@ -9,10 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.guyyo.gdxGame.model.Assets;
-import com.guyyo.gdxGame.model.EnemyPool;
 import com.guyyo.gdxGame.model.FireOrb;
 import com.guyyo.gdxGame.model.Hero;
-import com.guyyo.gdxGame.model.ShotPool;
 
 /*
  * Following MVC pattern, the FixedStage will handle game logic.
@@ -29,12 +27,10 @@ public class FixedStage extends Stage implements InputProcessor {
 	ImageButton fireButton;
 
 	Hero hero;
-	EnemyPool enemyPool;
-	ShotPool shotpool;
 	FireOrb fireOrb;
 
 	public FixedStage(InputMultiplexer inputMultiplexer, Camera camera,
-			Hero hero, EnemyPool enemyPool, ShotPool shotpool, FireOrb fireOrb) {
+			Hero hero, FireOrb fireOrb) {
 		super();
 
 		touchpad = new Touchpad(5, Assets.touchpadStyle);
@@ -54,8 +50,6 @@ public class FixedStage extends Stage implements InputProcessor {
 		inputMultiplexer.addProcessor(this);
 		this.hero = hero;
 		this.cam = camera;
-		this.enemyPool = enemyPool;
-		this.shotpool = shotpool;
 		this.fireOrb = fireOrb;
 	}
 

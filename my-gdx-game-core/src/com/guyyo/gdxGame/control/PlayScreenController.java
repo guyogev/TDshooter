@@ -6,16 +6,12 @@ import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Animation.STATE;
 import com.guyyo.gdxGame.model.Assets;
-import com.guyyo.gdxGame.model.BloodPool;
-import com.guyyo.gdxGame.model.CowPool;
 import com.guyyo.gdxGame.model.Enemy;
-import com.guyyo.gdxGame.model.EnemyPool;
 import com.guyyo.gdxGame.model.FireOrb;
 import com.guyyo.gdxGame.model.Hero;
 import com.guyyo.gdxGame.model.Hud;
-import com.guyyo.gdxGame.model.PowerUpsPool;
+import com.guyyo.gdxGame.model.PoolsReposetory;
 import com.guyyo.gdxGame.model.Shot;
-import com.guyyo.gdxGame.model.ShotPool;
 import com.guyyo.gdxGame.view.GameOverScreen;
 
 /*
@@ -26,23 +22,14 @@ public class PlayScreenController implements GestureListener {
 
 	private MyGdxGame game;
 	private Hero hero;
-	private EnemyPool enemyPool;
-	private ShotPool shotPool;
-	private PowerUpsPool powerUpPool;
-	private BloodPool bloodPool;
 	private FireOrb fireOrb;
 	// private CowPool cowPool;
 	private Hud hud;
 
-	public PlayScreenController(MyGdxGame game, Hero hero, EnemyPool enemyPool,
-			ShotPool shotPool, CowPool cowPool, PowerUpsPool powerUpsPool,
-			BloodPool bloodPool, FireOrb fireOrb, Hud hud) {
+	public PlayScreenController(MyGdxGame game, Hero hero, FireOrb fireOrb,
+			Hud hud) {
 		this.game = game;
 		this.hero = hero;
-		this.enemyPool = enemyPool;
-		this.shotPool = shotPool;
-		this.powerUpPool = powerUpsPool;
-		this.bloodPool = bloodPool;
 		this.fireOrb = fireOrb;
 		// this.cowPool = cowPool;
 		this.hud = hud;
@@ -61,7 +48,7 @@ public class PlayScreenController implements GestureListener {
 		hero.animate();
 
 		// enemies
-		for (Animation e : enemyPool.getPool()) {
+		for (Animation e : PoolsReposetory.enemyPool.getPool()) {
 			if (e.state == STATE.IN_USE) {
 				// move
 				if (((Enemy) e).isWalking()) {
@@ -82,14 +69,14 @@ public class PlayScreenController implements GestureListener {
 		}
 
 		// shots
-		for (Animation s : shotPool.getPool())
+		for (Animation s : PoolsReposetory.shotPool.getPool())
 			if (s.state == STATE.IN_USE) {
 				s.animate();
 				detectShotEnemyCollisions((Shot) s);
 			}
 
 		// powerUps
-		for (Animation p : powerUpPool.getPool())
+		for (Animation p : PoolsReposetory.powerUpsPool.getPool())
 			if (p.state == STATE.IN_USE) {
 				p.animate();
 				if (colliding(hero, p) && !hero.hasPowerUps()) {
@@ -99,9 +86,14 @@ public class PlayScreenController implements GestureListener {
 			}
 
 		// blood
-		for (Animation b : bloodPool.getPool())
+		for (Animation b : PoolsReposetory.bloodPool.getPool())
 			if (b.state == STATE.IN_USE) {
 				b.animate();
+			}
+
+		for (Animation s : PoolsReposetory.sparksPool.getPool())
+			if (s.state == STATE.IN_USE) {
+				s.animate();
 			}
 
 		// FX
@@ -127,8 +119,11 @@ public class PlayScreenController implements GestureListener {
 			if (!hero.isBehaviorLocked()) {
 				if (hero.decreaseHp())
 					hero.die();
-				if (!e.isAttacking())
+				if (!e.isAttacking()) {
 					e.attack();
+					PoolsReposetory.bloodPool.spawn(
+							hero.getX() , hero.getY() );
+				}
 				if (fireOrb.state == STATE.IN_USE) {
 					e.die();
 					hud.incScore();
@@ -139,11 +134,11 @@ public class PlayScreenController implements GestureListener {
 	}
 
 	private void detectShotEnemyCollisions(Shot s) {
-		for (Animation e : enemyPool.getPool())
+		for (Animation e : PoolsReposetory.enemyPool.getPool())
 			if (e.state == STATE.IN_USE) {
 				if (colliding(e, s)) {
-					bloodPool.spawn(e.getCenterX() + e.getOriginX(),
-							e.getCenterY());
+					PoolsReposetory.sparksPool.spawn(
+							e.getCenterX() + e.getOriginX(), e.getCenterY());
 					s.kill();
 					((Enemy) e).die();
 					hud.incScore();
@@ -163,7 +158,8 @@ public class PlayScreenController implements GestureListener {
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		hero.attack2();
-		shotPool.spawn(hero.getX(), hero.getY(), hero.getAnimDirection());
+		PoolsReposetory.shotPool.spawn(hero.getX(), hero.getY(),
+				hero.getAnimDirection());
 		Assets.shotSound.play();
 		return true;
 	}
@@ -177,11 +173,11 @@ public class PlayScreenController implements GestureListener {
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) {
 		hero.attack();
-		int power = (int) velocityY /800;
-		for (Animation e : enemyPool.getPool()) {
-			if (power > 0 && colliding(hero,e) && !((Enemy) e).isDying()){
+		int power = (int) Math.abs(velocityY) / 800;
+		for (Animation e : PoolsReposetory.enemyPool.getPool()) {
+			if (power > 0 && colliding(hero, e) && !((Enemy) e).isDying()) {
 				((Enemy) e).die();
-				if (--power <= 0 )
+				if (--power <= 0)
 					break;
 			}
 		}

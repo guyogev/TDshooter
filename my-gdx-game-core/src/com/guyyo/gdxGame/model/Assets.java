@@ -28,7 +28,7 @@ public final class Assets {
 	public static Texture bg, badlogic, heroRun, hero2, enemy, shot,
 			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
 			blood_3, blood_4, blood_5, fireOrb, skeletonOccultist,
-			skeletonMage, skeletonKnight;
+			skeletonMage, skeletonKnight, sparks;
 
 	// drawables
 	public static Drawable fireButtonUp, fireButtonDown;
@@ -51,9 +51,9 @@ public final class Assets {
 
 		// parameters
 		PLAY_SCREEN_WIDTH = prop.get("width", Integer.class)
-				* prop.get("tilewidth", Integer.class)/2;
+				* prop.get("tilewidth", Integer.class) / 2;
 		PLAY_SCREEN_HEIGTH = prop.get("height", Integer.class)
-				* prop.get("tileheight", Integer.class)/2;
+				* prop.get("tileheight", Integer.class) / 2;
 
 		MOVING_CAM_MIN_X = Gdx.graphics.getWidth() / 2;
 		MOVING_CAM_MAX_X = PLAY_SCREEN_WIDTH - Gdx.graphics.getWidth() / 2;
@@ -79,6 +79,9 @@ public final class Assets {
 		blood_4 = new Texture(Gdx.files.internal("blood_hit_04.png"));
 		blood_5 = new Texture(Gdx.files.internal("blood_hit_05.png"));
 		fireOrb = new Texture(Gdx.files.internal("fire orb.png"));
+
+		sparks = new Texture(Gdx.files.internal("sparks.png"));
+
 		skeletonOccultist = new Texture(
 				Gdx.files.internal("enemy/skeleton_occultist.png"));
 		skeletonMage = new Texture(

@@ -11,6 +11,5 @@ public class PowerUpsPool extends AnimationsPool {
 		for (int i = 0; i < size; i++)
 			pool.add(new PowerUp());
 		rand = new Random();
-		spawn();
 	}
 }

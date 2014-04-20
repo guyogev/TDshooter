@@ -63,4 +63,10 @@ public class ShotPool extends AnimationsPool {
 			}
 	}
 
+	@Override
+	public void spawn() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
