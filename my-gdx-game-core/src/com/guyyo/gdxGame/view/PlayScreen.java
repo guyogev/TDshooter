@@ -3,9 +3,10 @@ package com.guyyo.gdxGame.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricStaggeredTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.guyyo.gdxGame.MyGdxGame;
 import com.guyyo.gdxGame.control.FixedStage;
@@ -23,7 +24,7 @@ import com.guyyo.gdxGame.model.PoolsReposetory;
 public class PlayScreen extends MyScreen {
 
 	SpriteBatch batch;
-	IsometricTiledMapRenderer tileMapRenderer;
+	IsometricStaggeredTiledMapRenderer tileMapRenderer;
 
 	Stage movingStage; // container for game actors
 	FixedStage fixedStage; // container for game controls
@@ -40,7 +41,7 @@ public class PlayScreen extends MyScreen {
 		batch = new SpriteBatch();
 		inputMultiplexer = new InputMultiplexer();
 
-		tileMapRenderer = new IsometricTiledMapRenderer(Assets.tileMap);
+		tileMapRenderer = new IsometricStaggeredTiledMapRenderer(Assets.tileMap);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		movingStage = new Stage();
@@ -99,16 +100,15 @@ public class PlayScreen extends MyScreen {
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 		// update camera position & projection
 		movingStage.getCamera().update();
-		// tileMapRenderer.setView((OrthographicCamera)
-		// movingStage.getCamera());
-		// tileMapRenderer.render();
+		tileMapRenderer.setView((OrthographicCamera)movingStage.getCamera());
+		tileMapRenderer.render();
 		batch.setProjectionMatrix(movingStage.getCamera().combined);
 		// draw background
-		batch.begin();
+/*		batch.begin();
 		batch.draw(Assets.bg, 0, 0, Assets.PLAY_SCREEN_WIDTH,
 				Assets.PLAY_SCREEN_HEIGTH);
 		batch.end();
-		// update game state
+*/		// update game state
 		playController.update();
 		// draw actors
 		movingStage.draw();

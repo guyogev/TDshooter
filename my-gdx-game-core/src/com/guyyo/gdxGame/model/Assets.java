@@ -51,10 +51,10 @@ public final class Assets {
 
 		// parameters
 		PLAY_SCREEN_WIDTH = prop.get("width", Integer.class)
-				* prop.get("tilewidth", Integer.class) / 2;
+				* prop.get("tilewidth", Integer.class);
 		PLAY_SCREEN_HEIGTH = prop.get("height", Integer.class)
-				* prop.get("tileheight", Integer.class) / 2;
-
+				* prop.get("tileheight", Integer.class)/2;
+		System.out.println(PLAY_SCREEN_HEIGTH);
 		MOVING_CAM_MIN_X = Gdx.graphics.getWidth() / 2;
 		MOVING_CAM_MAX_X = PLAY_SCREEN_WIDTH - Gdx.graphics.getWidth() / 2;
 		MOVING_CAM_MIN_Y = Gdx.graphics.getHeight() / 2;

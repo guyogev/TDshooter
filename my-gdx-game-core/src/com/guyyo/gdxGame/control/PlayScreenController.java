@@ -138,7 +138,7 @@ public class PlayScreenController implements GestureListener {
 			if (e.state == STATE.IN_USE) {
 				if (colliding(e, s)) {
 					PoolsReposetory.sparksPool.spawn(
-							e.getCenterX() + e.getOriginX(), e.getCenterY());
+							e.getX(), e.getY());
 					s.kill();
 					((Enemy) e).die();
 					hud.incScore();

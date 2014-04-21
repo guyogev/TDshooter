@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="staggered" width="50" height="50" tilewidth="64" tileheight="32">
+ <tileset firstgid="1" name="grassland_tiles" tilewidth="64" tileheight="32">
+  <image source="grassland_tiles.png" width="1024" height="1344"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qWXY6DgqqmqqqqqqqqqqurzBwHpCcU=
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztlzlOA0EQRdu+Bctl4AaQsSSQIJYEJBZjEpDYI5DYY3YSJCeAfQDAJwAEHAABR+AjdTBG1sh0dVf1jOpJpe6kpv6fP9OjMUZR0um364CoChp9if2gmAo/jNl1XFQFjdHEfkJMhR/m7VoOOOM64LV/KSX2C4FnZY3Q9z40XUVjuos8s+o8YzJND7LoZcrjhWdMA6UCzsSCwGBHhpDFcEoeZYKXafSOJPo/3C/lzDrmb6A2W/TR7LybQe8cU6aTyGIq0PuxDA+zws/mAeYfoo4IOlbQu8bkYxFZLAXKYwceVoXzOMf8C9Ql6spRyy769pl8bCGL7UB5HMPDnnAeN5h/i7pDVR21nKDvLEPfoDRO4aPGNKvZ2X+P+Q+oR1Td8Z7WDJ+H0MTg4wk5POfk+Y6VDmkBnmhHdRL6Y/n/bZMWkEPepAUoDXxJC1CipSItgEjlT/2Xd7u++hLkANWDT6jfZaqHb7t+EnUoiqLkiVj+mRRFaZ0f5nU6vA==
+  </data>
+ </layer>
+</map>
