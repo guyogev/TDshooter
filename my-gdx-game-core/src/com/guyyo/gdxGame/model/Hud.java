@@ -38,7 +38,7 @@ public class Hud extends Table {
 	}
 
 	public void update() {
-		hpBar.setValue(SingaltonsRepository.hero.getHp());
-		manaBar.setValue(SingaltonsRepository.hero.getMana());
+		hpBar.setValue(SingletonsRepository.hero.getHp());
+		manaBar.setValue(SingletonsRepository.hero.getMana());
 	}
 }

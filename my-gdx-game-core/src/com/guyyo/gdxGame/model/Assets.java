@@ -28,7 +28,8 @@ public final class Assets {
 	public static Texture bg, badlogic, heroRun, hero2, enemy, fireBall,
 			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
 			blood_3, blood_4, blood_5, fireOrb, skeletonOccultist,
-			skeletonMage, skeletonKnight, sparks, ManaPowerUp, HpPowerUp;
+			skeletonMage, skeletonKnight, sparks, lightning, ManaPowerUp,
+			HpPowerUp;
 
 	// drawables
 	public static Drawable fireButtonUp, fireButtonDown;
@@ -38,7 +39,8 @@ public final class Assets {
 	public static TouchpadStyle touchpadStyle;
 
 	// sound
-	public static Sound shotSound, pistolEmpty, reload, bones, fireFX, axe;
+	public static Sound shotSound, pistolEmpty, reload, bones, fireFX, axe,
+			thonder;
 	public static Music music;
 
 	// tile maps
@@ -53,7 +55,7 @@ public final class Assets {
 		PLAY_SCREEN_WIDTH = prop.get("width", Integer.class)
 				* prop.get("tilewidth", Integer.class);
 		PLAY_SCREEN_HEIGTH = prop.get("height", Integer.class)
-				* prop.get("tileheight", Integer.class)/2;
+				* prop.get("tileheight", Integer.class) / 2;
 		System.out.println(PLAY_SCREEN_HEIGTH);
 		MOVING_CAM_MIN_X = Gdx.graphics.getWidth() / 2;
 		MOVING_CAM_MAX_X = PLAY_SCREEN_WIDTH - Gdx.graphics.getWidth() / 2;
@@ -72,6 +74,7 @@ public final class Assets {
 		ManaPowerUp = new Texture(Gdx.files.internal("powerups/mana.png"));
 		HpPowerUp = new Texture(Gdx.files.internal("powerups/hp.png"));
 		sparks = new Texture(Gdx.files.internal("fx/sparks.png"));
+		lightning = new Texture(Gdx.files.internal("fx/lightning.png"));
 
 		skeletonOccultist = new Texture(
 				Gdx.files.internal("enemy/skeleton_occultist.png"));
@@ -83,11 +86,11 @@ public final class Assets {
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/foom_0.wav"));
 		fireFX = Gdx.audio.newSound(Gdx.files
 				.internal("sound/fire_crackling 2.mp3"));
-
+		thonder = Gdx.audio.newSound(Gdx.files.internal("sound/thonder.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("sound/loop.wav"));
 		axe = Gdx.audio.newSound(Gdx.files.internal("sound/axe.wav"));
 
-		// gui
+		// UI
 		defultSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		Skin touchpadSkin = new Skin();
 

@@ -14,7 +14,7 @@ import com.guyyo.gdxGame.control.PlayScreenController;
 import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.PoolsReposetory;
-import com.guyyo.gdxGame.model.SingaltonsRepository;
+import com.guyyo.gdxGame.model.SingletonsRepository;
 
 /*
  * main game screen.
@@ -42,14 +42,16 @@ public class PlayScreen extends MyScreen {
 		
 		movingStage = new Stage();
 		fixedStage = new FixedStage(inputMultiplexer, movingStage.getCamera());
-
-		SingaltonsRepository.init();
-		movingStage.addActor(SingaltonsRepository.hero);
-		movingStage.addActor(SingaltonsRepository.fireOrb);
-		movingStage.addActor(SingaltonsRepository.mana);
-		movingStage.addActor(SingaltonsRepository.hp);
-		fixedStage.addActor(SingaltonsRepository.hud);
-
+		
+		//Animated Singletons
+		SingletonsRepository.init();
+		movingStage.addActor(SingletonsRepository.hero);
+		movingStage.addActor(SingletonsRepository.fireOrb);
+		movingStage.addActor(SingletonsRepository.mana);
+		movingStage.addActor(SingletonsRepository.hp);
+		fixedStage.addActor(SingletonsRepository.hud);
+		
+		//Animated pools
 		PoolsReposetory.init();
 		for (Animation e : PoolsReposetory.enemyPool.getPool())
 			movingStage.addActor(e);
@@ -59,9 +61,8 @@ public class PlayScreen extends MyScreen {
 			movingStage.addActor(b);
 		for (Animation b : PoolsReposetory.sparksPool.getPool())
 			movingStage.addActor(b);
-
-		// displayed controls
-		
+		for (Animation l : PoolsReposetory.lightningPool.getPool())
+			movingStage.addActor(l);
 
 		// playController
 		playController = new PlayScreenController(game);

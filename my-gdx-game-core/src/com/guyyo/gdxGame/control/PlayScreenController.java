@@ -9,7 +9,7 @@ import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.Enemy;
 import com.guyyo.gdxGame.model.PoolsReposetory;
 import com.guyyo.gdxGame.model.Shot;
-import com.guyyo.gdxGame.model.SingaltonsRepository;
+import com.guyyo.gdxGame.model.SingletonsRepository;
 import com.guyyo.gdxGame.view.GameOverScreen;
 
 /*
@@ -29,12 +29,12 @@ public class PlayScreenController implements GestureListener {
 	public void update() {
 
 		// hero
-		if (SingaltonsRepository.hero.state == STATE.FREE) {
+		if (SingletonsRepository.hero.state == STATE.FREE) {
 			Assets.music.stop();
 			game.setScreen(new GameOverScreen(game));
 			// game.playScreen.dispose();
 		}
-		SingaltonsRepository.hero.animate();
+		SingletonsRepository.hero.animate();
 
 		// enemies
 		for (Animation e : PoolsReposetory.enemyPool.getPool()) {
@@ -42,9 +42,9 @@ public class PlayScreenController implements GestureListener {
 				// move
 				if (((Enemy) e).isWalking()) {
 					double deg = Math.atan2(
-							SingaltonsRepository.hero.getCenterY()
+							SingletonsRepository.hero.getCenterY()
 									- e.getCenterY(),
-							SingaltonsRepository.hero.getCenterX()
+							SingletonsRepository.hero.getCenterX()
 									- e.getCenterX());
 					double cos = Math.cos(deg);
 					double sin = Math.sin(deg);
@@ -56,8 +56,7 @@ public class PlayScreenController implements GestureListener {
 				if (!((Enemy) e).isBehaviorLocked())
 					detectHeroEnemyCollisions((Enemy) e);
 				e.animate();
-			} // else
-				// e.spawn();
+			}
 		}
 
 		// shots
@@ -67,19 +66,20 @@ public class PlayScreenController implements GestureListener {
 				detectShotEnemyCollisions((Shot) s);
 			}
 
-		// powerUps
-		if (SingaltonsRepository.hp.state == STATE.IN_USE) {
-			SingaltonsRepository.hp.animate();
-			if (colliding(SingaltonsRepository.hero, SingaltonsRepository.hp)) {
-				SingaltonsRepository.hero.incHp(25);
-				SingaltonsRepository.hp.spawn();
+		// Hp
+		if (SingletonsRepository.hp.state == STATE.IN_USE) {
+			SingletonsRepository.hp.animate();
+			if (colliding(SingletonsRepository.hero, SingletonsRepository.hp)) {
+				SingletonsRepository.hero.incHp(25);
+				SingletonsRepository.hp.spawn();
 			}
 		}
-		if (SingaltonsRepository.mana.state == STATE.IN_USE) {
-			SingaltonsRepository.mana.animate();
-			if (colliding(SingaltonsRepository.hero, SingaltonsRepository.mana)) {
-				SingaltonsRepository.hero.incMana(25);
-				SingaltonsRepository.mana.spawn();
+		// Mana
+		if (SingletonsRepository.mana.state == STATE.IN_USE) {
+			SingletonsRepository.mana.animate();
+			if (colliding(SingletonsRepository.hero, SingletonsRepository.mana)) {
+				SingletonsRepository.hero.incMana(25);
+				SingletonsRepository.mana.spawn();
 			}
 		}
 
@@ -89,21 +89,28 @@ public class PlayScreenController implements GestureListener {
 				b.animate();
 			}
 
+		// sparks
 		for (Animation s : PoolsReposetory.sparksPool.getPool())
 			if (s.state == STATE.IN_USE) {
 				s.animate();
 			}
 
-		// FX
-		if (SingaltonsRepository.fireOrb.state == STATE.IN_USE) {
-			SingaltonsRepository.fireOrb.setPosition(
-					SingaltonsRepository.hero.getX(),
-					SingaltonsRepository.hero.getY() + 10);
-			SingaltonsRepository.fireOrb.animate();
+		// Lightning
+		for (Animation l : PoolsReposetory.lightningPool.getPool())
+			if (l.state == STATE.IN_USE) {
+				l.animate();
+			}
+
+		// fireOrb
+		if (SingletonsRepository.fireOrb.state == STATE.IN_USE) {
+			SingletonsRepository.fireOrb.setPosition(
+					SingletonsRepository.hero.getX(),
+					SingletonsRepository.hero.getY() + 10);
+			SingletonsRepository.fireOrb.animate();
 		}
 
 		// score
-		SingaltonsRepository.hud.update();
+		SingletonsRepository.hud.update();
 	}
 
 	/* ********** Collisions Detections ********** */
@@ -115,19 +122,19 @@ public class PlayScreenController implements GestureListener {
 	}
 
 	private void detectHeroEnemyCollisions(Enemy e) {
-		if (colliding(SingaltonsRepository.hero, e)) {
-			if (!SingaltonsRepository.hero.isBehaviorLocked()) {
-				if (SingaltonsRepository.hero.decreaseHp())
-					SingaltonsRepository.hero.die();
+		if (colliding(SingletonsRepository.hero, e)) {
+			if (!SingletonsRepository.hero.isBehaviorLocked()) {
+				if (SingletonsRepository.hero.decreaseHp())
+					SingletonsRepository.hero.die();
 				if (!e.isAttacking()) {
 					e.attack();
 					PoolsReposetory.bloodPool.spawn(
-							SingaltonsRepository.hero.getX(),
-							SingaltonsRepository.hero.getY());
+							SingletonsRepository.hero.getX(),
+							SingletonsRepository.hero.getY());
 				}
-				if (SingaltonsRepository.fireOrb.state == STATE.IN_USE) {
+				if (SingletonsRepository.fireOrb.state == STATE.IN_USE) {
 					e.die();
-					SingaltonsRepository.hud.incScore();
+					SingletonsRepository.hud.incScore();
 				}
 			}
 		} else if (!e.isWalking())
@@ -141,7 +148,7 @@ public class PlayScreenController implements GestureListener {
 					PoolsReposetory.sparksPool.spawn(e.getX(), e.getY());
 					s.kill();
 					((Enemy) e).die();
-					SingaltonsRepository.hud.incScore();
+					SingletonsRepository.hud.incScore();
 					break;
 				}
 			}
@@ -157,12 +164,12 @@ public class PlayScreenController implements GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		if (SingaltonsRepository.hero.getMana() >= 10) {
-			SingaltonsRepository.hero.decMana(10);
-			SingaltonsRepository.hero.attack2();
-			PoolsReposetory.shotPool.spawn(SingaltonsRepository.hero.getX(),
-					SingaltonsRepository.hero.getY(),
-					SingaltonsRepository.hero.getAnimDirection());
+		if (SingletonsRepository.hero.getMana() >= 10) {
+			SingletonsRepository.hero.decMana(10);
+			SingletonsRepository.hero.attack2();
+			PoolsReposetory.shotPool.spawn(SingletonsRepository.hero.getX(),
+					SingletonsRepository.hero.getY(),
+					SingletonsRepository.hero.getAnimDirection());
 			Assets.shotSound.play();
 		}
 		return true;
@@ -170,21 +177,38 @@ public class PlayScreenController implements GestureListener {
 
 	@Override
 	public boolean longPress(float x, float y) {
-		// TODO Auto-generated method stub
+		SingletonsRepository.hero.hardAttack = true;
+		System.out.println("longpress");
 		return false;
 	}
 
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) {
-		SingaltonsRepository.hero.attack();
-		int power = (int) Math.abs(velocityY) / 800;
-		for (Animation e : PoolsReposetory.enemyPool.getPool()) {
-			if (power > 0 && colliding(SingaltonsRepository.hero, e)
-					&& !((Enemy) e).isDying()) {
-				((Enemy) e).die();
-				if (--power <= 0)
-					break;
+		if (SingletonsRepository.hero.hardAttack) {
+			for (Animation e : PoolsReposetory.enemyPool.getPool())
+				if (colliding(SingletonsRepository.hero, e)
+						&& !((Enemy) e).isDying()) {
+					((Enemy) e).die();
+					PoolsReposetory.lightningPool.spawn(((Enemy) e).getX(),
+							((Enemy) e).getY());
+					Assets.thonder.play();
+					SingletonsRepository.hero.decMana(5);
+					if (SingletonsRepository.hero.getMana() < 5)
+						break;
+				}
+			SingletonsRepository.hero.hardAttack = false;
+		} else {
+			SingletonsRepository.hero.attack();
+			int power = (int) Math.abs(velocityY) / 800;
+			for (Animation e : PoolsReposetory.enemyPool.getPool()) {
+				if (power > 0 && colliding(SingletonsRepository.hero, e)
+						&& !((Enemy) e).isDying()) {
+					((Enemy) e).die();
+					if (--power <= 0)
+						break;
+				}
 			}
+
 		}
 		Assets.axe.play();
 		return true;

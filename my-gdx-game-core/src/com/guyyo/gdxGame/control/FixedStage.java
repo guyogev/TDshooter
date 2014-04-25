@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.guyyo.gdxGame.model.Assets;
-import com.guyyo.gdxGame.model.SingaltonsRepository;
+import com.guyyo.gdxGame.model.SingletonsRepository;
 
 /*
  * Following MVC pattern, the FixedStage will handle game logic.
@@ -49,50 +49,50 @@ public class FixedStage extends Stage implements InputProcessor {
 		float x, y;
 		// hero & camera movement
 		if (touchpad.isTouched()
-				&& !SingaltonsRepository.hero.isBehaviorLocked()) {
-			if (!SingaltonsRepository.hero.isRunning())
-				SingaltonsRepository.hero.run();
+				&& !SingletonsRepository.hero.isBehaviorLocked()) {
+			if (!SingletonsRepository.hero.isRunning())
+				SingletonsRepository.hero.run();
 			// hero direction
-			SingaltonsRepository.hero.setDirection(Math.atan2(
+			SingletonsRepository.hero.setDirection(Math.atan2(
 					touchpad.getKnobPercentY(), touchpad.getKnobPercentX()));
 			// hero position
-			x = SingaltonsRepository.hero.getX()
-					+ SingaltonsRepository.hero.getSpeed()
+			x = SingletonsRepository.hero.getX()
+					+ SingletonsRepository.hero.getSpeed()
 					* touchpad.getKnobPercentX();
-			y = SingaltonsRepository.hero.getY()
-					+ SingaltonsRepository.hero.getSpeed()
+			y = SingletonsRepository.hero.getY()
+					+ SingletonsRepository.hero.getSpeed()
 					* touchpad.getKnobPercentY();
 			if (x > 0
 					&& x < Assets.PLAY_SCREEN_WIDTH
-							- SingaltonsRepository.hero.getWidth() / 2)
-				SingaltonsRepository.hero.setX(x);
+							- SingletonsRepository.hero.getWidth() / 2)
+				SingletonsRepository.hero.setX(x);
 			if (y > 0
 					&& y < Assets.PLAY_SCREEN_HEIGTH
-							- SingaltonsRepository.hero.getHeight() / 2)
-				SingaltonsRepository.hero.setY(y);
+							- SingletonsRepository.hero.getHeight() / 2)
+				SingletonsRepository.hero.setY(y);
 			// hero position offset if camera stay static
-			if (SingaltonsRepository.hero.getX() > Assets.MOVING_CAM_MIN_X
-					&& SingaltonsRepository.hero.getX() < Assets.MOVING_CAM_MAX_X)
-				SingaltonsRepository.hero
-						.updateOffsetX(SingaltonsRepository.hero.getSpeed()
+			if (SingletonsRepository.hero.getX() > Assets.MOVING_CAM_MIN_X
+					&& SingletonsRepository.hero.getX() < Assets.MOVING_CAM_MAX_X)
+				SingletonsRepository.hero
+						.updateOffsetX(SingletonsRepository.hero.getSpeed()
 								* touchpad.getKnobPercentX());
 			// TODO offsetY
-			if (SingaltonsRepository.hero.getY() > Assets.MOVING_CAM_MIN_Y
-					&& SingaltonsRepository.hero.getY() < Assets.MOVING_CAM_MAX_Y)
-				SingaltonsRepository.hero
-						.updateOffsetY(SingaltonsRepository.hero.getSpeed()
+			if (SingletonsRepository.hero.getY() > Assets.MOVING_CAM_MIN_Y
+					&& SingletonsRepository.hero.getY() < Assets.MOVING_CAM_MAX_Y)
+				SingletonsRepository.hero
+						.updateOffsetY(SingletonsRepository.hero.getSpeed()
 								* touchpad.getKnobPercentY());
 
 			// camera movement
-			x = SingaltonsRepository.hero.getX();
-			y = SingaltonsRepository.hero.getY();
+			x = SingletonsRepository.hero.getX();
+			y = SingletonsRepository.hero.getY();
 			if (x >= Assets.MOVING_CAM_MIN_X && x <= Assets.MOVING_CAM_MAX_X)
-				cam.position.x = SingaltonsRepository.hero.getX();
+				cam.position.x = SingletonsRepository.hero.getX();
 			if (y >= Assets.MOVING_CAM_MIN_Y && y <= Assets.MOVING_CAM_MAX_Y)
-				cam.position.y = SingaltonsRepository.hero.getY();
-		} else if (!SingaltonsRepository.hero.isStanding()
-				&& !SingaltonsRepository.hero.isBehaviorLocked())
-			SingaltonsRepository.hero.stand();
+				cam.position.y = SingletonsRepository.hero.getY();
+		} else if (!SingletonsRepository.hero.isStanding()
+				&& !SingletonsRepository.hero.isBehaviorLocked())
+			SingletonsRepository.hero.stand();
 
 		// reload button
 		/*
@@ -101,17 +101,17 @@ public class FixedStage extends Stage implements InputProcessor {
 		 */
 
 		// fire button
-		if (SingaltonsRepository.hero.getMana() > 50
+		if (SingletonsRepository.hero.getMana() > 50
 				&& !fireButton.isVisible()) {
 			fireButton.setVisible(true);
 			fireButton.setDisabled(false);
 			fireButton.setChecked(false);
 		}
 		if (!fireButton.isDisabled() && fireButton.isChecked()) {
-			SingaltonsRepository.fireOrb.spawn();
-			Assets.fireFX.play();
-			SingaltonsRepository.hero.castSpell();
-			SingaltonsRepository.hero.decMana(50);;
+			SingletonsRepository.fireOrb.spawn();
+			Assets.fireFX.play(.5f);
+			SingletonsRepository.hero.castSpell();
+			SingletonsRepository.hero.decMana(50);;
 			fireButton.setDisabled(true);
 			fireButton.setVisible(false);
 		}

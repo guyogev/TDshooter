@@ -55,7 +55,6 @@ public class ShotPool extends AnimationsPool {
 					dy = .5f * speed;
 					break;
 				}
-				System.out.println(""+dx+" "+dy);
 				((Shot) s).setDx(dx);
 				((Shot) s).setDy(dy);
 				s.state = STATE.IN_USE;

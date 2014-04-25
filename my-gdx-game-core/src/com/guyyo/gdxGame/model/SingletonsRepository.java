@@ -1,6 +1,6 @@
 package com.guyyo.gdxGame.model;
 
-public class SingaltonsRepository {
+public class SingletonsRepository {
 	public static Hero hero;
 	public static FireOrb fireOrb;
 	public static ManaPowerUp mana;

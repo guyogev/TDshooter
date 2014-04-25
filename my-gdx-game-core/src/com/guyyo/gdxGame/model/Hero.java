@@ -23,6 +23,8 @@ public class Hero extends Animation {
 	float offsetX, offsetY, hp, mana;
 	int shotsLeft, reloadProgress, powerUpLeft;
 
+	public boolean hardAttack = false;
+
 	public Hero() {
 		animHash = new Hashtable<AnimDirection, Integer>();
 		animHash.put(AnimDirection.W, 0);
