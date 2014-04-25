@@ -2,17 +2,11 @@ package com.guyyo.gdxGame.model;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-public class PowerUp extends Animation {
-
-	public PowerUp() {
-		loadTexture(Assets.powerUps, 4, 4);
-		initParams();
-		state = STATE.SPAWN;
-	}
+public abstract class PowerUp extends Animation {
 
 	public void draw(Batch batch, float alpha) {
 		if (state != STATE.SPAWN)
-			super.draw(getFrame((int) frameRow), batch, alpha);
+			super.draw(getFrame(0), batch, alpha);
 	}
 
 	@Override

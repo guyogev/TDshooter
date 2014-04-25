@@ -17,7 +17,7 @@ public class Shot extends Animation {
 		animHash.put(AnimDirection.SE, 5);
 		animHash.put(AnimDirection.S, 6);
 		animHash.put(AnimDirection.SW, 7);
-		loadTexture(Assets.shot, 8, 8);
+		loadTexture(Assets.fireBall, 8, 8);
 		initParams();
 		speed = 4;
 		animDirection = AnimDirection.N;

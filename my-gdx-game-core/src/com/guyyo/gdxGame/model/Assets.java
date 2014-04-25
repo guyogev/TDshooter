@@ -25,10 +25,10 @@ public final class Assets {
 			MOVING_CAM_MAX_Y;
 
 	// Textures
-	public static Texture bg, badlogic, heroRun, hero2, enemy, shot,
+	public static Texture bg, badlogic, heroRun, hero2, enemy, fireBall,
 			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
 			blood_3, blood_4, blood_5, fireOrb, skeletonOccultist,
-			skeletonMage, skeletonKnight, sparks;
+			skeletonMage, skeletonKnight, sparks, ManaPowerUp, HpPowerUp;
 
 	// drawables
 	public static Drawable fireButtonUp, fireButtonDown;
@@ -61,26 +61,17 @@ public final class Assets {
 		MOVING_CAM_MAX_Y = PLAY_SCREEN_HEIGTH - Gdx.graphics.getHeight() / 2;
 
 		// images
-		bg = new Texture(Gdx.files.internal("bg1.png"));
-		badlogic = new Texture(Gdx.files.internal("badlogic.jpg"));
 		heroRun = new Texture(Gdx.files.internal("hero/orc_elite.png"));
-		heroPistol = new Texture(Gdx.files.internal("hero pistol.png"));
-		heroPistolReload = new Texture(
-				Gdx.files.internal("hero pistol reload.png"));
-		enemy = new Texture(Gdx.files.internal("enemy.png"));
-		enemy2 = new Texture(Gdx.files.internal("player.png"));
-		shot = new Texture(Gdx.files.internal("fireball.png"));
-		hero2 = new Texture(Gdx.files.internal("hero2.png"));
-		powerUps = new Texture(Gdx.files.internal("powerups.png"));
-		cow = new Texture(Gdx.files.internal("cowsheet.png"));
-		blood_1 = new Texture(Gdx.files.internal("blood_hit_01.png"));
-		// blood_2 = new Texture(Gdx.files.internal("blood_hit_02.png"));
-		blood_3 = new Texture(Gdx.files.internal("blood_hit_03.png"));
-		blood_4 = new Texture(Gdx.files.internal("blood_hit_04.png"));
-		blood_5 = new Texture(Gdx.files.internal("blood_hit_05.png"));
-		fireOrb = new Texture(Gdx.files.internal("fire orb.png"));
-
-		sparks = new Texture(Gdx.files.internal("sparks.png"));
+		fireBall = new Texture(Gdx.files.internal("fx/fireball.png"));
+		blood_1 = new Texture(Gdx.files.internal("fx/blood_hit_01.png"));
+		// blood_2 = new Texture(Gdx.files.internal("fx/blood_hit_02.png"));
+		blood_3 = new Texture(Gdx.files.internal("fx/blood_hit_03.png"));
+		blood_4 = new Texture(Gdx.files.internal("fx/blood_hit_04.png"));
+		blood_5 = new Texture(Gdx.files.internal("fx/blood_hit_05.png"));
+		fireOrb = new Texture(Gdx.files.internal("fx/fire orb.png"));
+		ManaPowerUp = new Texture(Gdx.files.internal("powerups/mana.png"));
+		HpPowerUp = new Texture(Gdx.files.internal("powerups/hp.png"));
+		sparks = new Texture(Gdx.files.internal("fx/sparks.png"));
 
 		skeletonOccultist = new Texture(
 				Gdx.files.internal("enemy/skeleton_occultist.png"));
@@ -92,11 +83,8 @@ public final class Assets {
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/foom_0.wav"));
 		fireFX = Gdx.audio.newSound(Gdx.files
 				.internal("sound/fire_crackling 2.mp3"));
-		pistolEmpty = Gdx.audio.newSound(Gdx.files
-				.internal("sound/pistol empty.wav"));
-		reload = Gdx.audio.newSound(Gdx.files.internal("sound/reload.wav"));
+
 		music = Gdx.audio.newMusic(Gdx.files.internal("sound/loop.wav"));
-		bones = Gdx.audio.newSound(Gdx.files.internal("sound/bones.wav"));
 		axe = Gdx.audio.newSound(Gdx.files.internal("sound/axe.wav"));
 
 		// gui

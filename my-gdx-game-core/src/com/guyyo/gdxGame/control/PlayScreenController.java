@@ -7,11 +7,9 @@ import com.guyyo.gdxGame.model.Animation;
 import com.guyyo.gdxGame.model.Animation.STATE;
 import com.guyyo.gdxGame.model.Assets;
 import com.guyyo.gdxGame.model.Enemy;
-import com.guyyo.gdxGame.model.FireOrb;
-import com.guyyo.gdxGame.model.Hero;
-import com.guyyo.gdxGame.model.Hud;
 import com.guyyo.gdxGame.model.PoolsReposetory;
 import com.guyyo.gdxGame.model.Shot;
+import com.guyyo.gdxGame.model.SingaltonsRepository;
 import com.guyyo.gdxGame.view.GameOverScreen;
 
 /*
@@ -21,18 +19,9 @@ import com.guyyo.gdxGame.view.GameOverScreen;
 public class PlayScreenController implements GestureListener {
 
 	private MyGdxGame game;
-	private Hero hero;
-	private FireOrb fireOrb;
-	// private CowPool cowPool;
-	private Hud hud;
 
-	public PlayScreenController(MyGdxGame game, Hero hero, FireOrb fireOrb,
-			Hud hud) {
+	public PlayScreenController(MyGdxGame game) {
 		this.game = game;
-		this.hero = hero;
-		this.fireOrb = fireOrb;
-		// this.cowPool = cowPool;
-		this.hud = hud;
 	}
 
 	// the main game logic. process Actors state and position and react as
@@ -40,20 +29,23 @@ public class PlayScreenController implements GestureListener {
 	public void update() {
 
 		// hero
-		if (hero.state == STATE.FREE) {
+		if (SingaltonsRepository.hero.state == STATE.FREE) {
 			Assets.music.stop();
 			game.setScreen(new GameOverScreen(game));
 			// game.playScreen.dispose();
 		}
-		hero.animate();
+		SingaltonsRepository.hero.animate();
 
 		// enemies
 		for (Animation e : PoolsReposetory.enemyPool.getPool()) {
 			if (e.state == STATE.IN_USE) {
 				// move
 				if (((Enemy) e).isWalking()) {
-					double deg = Math.atan2(hero.getCenterY() - e.getCenterY(),
-							hero.getCenterX() - e.getCenterX());
+					double deg = Math.atan2(
+							SingaltonsRepository.hero.getCenterY()
+									- e.getCenterY(),
+							SingaltonsRepository.hero.getCenterX()
+									- e.getCenterX());
 					double cos = Math.cos(deg);
 					double sin = Math.sin(deg);
 					e.moveBy((float) (e.getSpeed() * cos),
@@ -76,14 +68,20 @@ public class PlayScreenController implements GestureListener {
 			}
 
 		// powerUps
-		for (Animation p : PoolsReposetory.powerUpsPool.getPool())
-			if (p.state == STATE.IN_USE) {
-				p.animate();
-				if (colliding(hero, p) && !hero.hasPowerUps()) {
-					hero.incPowerUp();
-					p.spawn();
-				}
+		if (SingaltonsRepository.hp.state == STATE.IN_USE) {
+			SingaltonsRepository.hp.animate();
+			if (colliding(SingaltonsRepository.hero, SingaltonsRepository.hp)) {
+				SingaltonsRepository.hero.incHp(25);
+				SingaltonsRepository.hp.spawn();
 			}
+		}
+		if (SingaltonsRepository.mana.state == STATE.IN_USE) {
+			SingaltonsRepository.mana.animate();
+			if (colliding(SingaltonsRepository.hero, SingaltonsRepository.mana)) {
+				SingaltonsRepository.hero.incMana(25);
+				SingaltonsRepository.mana.spawn();
+			}
+		}
 
 		// blood
 		for (Animation b : PoolsReposetory.bloodPool.getPool())
@@ -97,13 +95,15 @@ public class PlayScreenController implements GestureListener {
 			}
 
 		// FX
-		if (fireOrb.state == STATE.IN_USE) {
-			fireOrb.setPosition(hero.getX(), hero.getY() + 10);
-			fireOrb.animate();
+		if (SingaltonsRepository.fireOrb.state == STATE.IN_USE) {
+			SingaltonsRepository.fireOrb.setPosition(
+					SingaltonsRepository.hero.getX(),
+					SingaltonsRepository.hero.getY() + 10);
+			SingaltonsRepository.fireOrb.animate();
 		}
 
 		// score
-		hud.update(hero.getShotsLeft(), hero.getHp());
+		SingaltonsRepository.hud.update();
 	}
 
 	/* ********** Collisions Detections ********** */
@@ -115,18 +115,19 @@ public class PlayScreenController implements GestureListener {
 	}
 
 	private void detectHeroEnemyCollisions(Enemy e) {
-		if (colliding(hero, e)) {
-			if (!hero.isBehaviorLocked()) {
-				if (hero.decreaseHp())
-					hero.die();
+		if (colliding(SingaltonsRepository.hero, e)) {
+			if (!SingaltonsRepository.hero.isBehaviorLocked()) {
+				if (SingaltonsRepository.hero.decreaseHp())
+					SingaltonsRepository.hero.die();
 				if (!e.isAttacking()) {
 					e.attack();
 					PoolsReposetory.bloodPool.spawn(
-							hero.getX() , hero.getY() );
+							SingaltonsRepository.hero.getX(),
+							SingaltonsRepository.hero.getY());
 				}
-				if (fireOrb.state == STATE.IN_USE) {
+				if (SingaltonsRepository.fireOrb.state == STATE.IN_USE) {
 					e.die();
-					hud.incScore();
+					SingaltonsRepository.hud.incScore();
 				}
 			}
 		} else if (!e.isWalking())
@@ -137,11 +138,10 @@ public class PlayScreenController implements GestureListener {
 		for (Animation e : PoolsReposetory.enemyPool.getPool())
 			if (e.state == STATE.IN_USE) {
 				if (colliding(e, s)) {
-					PoolsReposetory.sparksPool.spawn(
-							e.getX(), e.getY());
+					PoolsReposetory.sparksPool.spawn(e.getX(), e.getY());
 					s.kill();
 					((Enemy) e).die();
-					hud.incScore();
+					SingaltonsRepository.hud.incScore();
 					break;
 				}
 			}
@@ -157,10 +157,14 @@ public class PlayScreenController implements GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		hero.attack2();
-		PoolsReposetory.shotPool.spawn(hero.getX(), hero.getY(),
-				hero.getAnimDirection());
-		Assets.shotSound.play();
+		if (SingaltonsRepository.hero.getMana() >= 10) {
+			SingaltonsRepository.hero.decMana(10);
+			SingaltonsRepository.hero.attack2();
+			PoolsReposetory.shotPool.spawn(SingaltonsRepository.hero.getX(),
+					SingaltonsRepository.hero.getY(),
+					SingaltonsRepository.hero.getAnimDirection());
+			Assets.shotSound.play();
+		}
 		return true;
 	}
 
@@ -172,10 +176,11 @@ public class PlayScreenController implements GestureListener {
 
 	@Override
 	public boolean fling(float velocityX, float velocityY, int button) {
-		hero.attack();
+		SingaltonsRepository.hero.attack();
 		int power = (int) Math.abs(velocityY) / 800;
 		for (Animation e : PoolsReposetory.enemyPool.getPool()) {
-			if (power > 0 && colliding(hero, e) && !((Enemy) e).isDying()) {
+			if (power > 0 && colliding(SingaltonsRepository.hero, e)
+					&& !((Enemy) e).isDying()) {
 				((Enemy) e).die();
 				if (--power <= 0)
 					break;

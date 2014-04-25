@@ -20,7 +20,7 @@ public class Hero extends Animation {
 	AnimBehavior animBehavior;
 	boolean behaviorLocked;
 
-	float offsetX, offsetY, hp;
+	float offsetX, offsetY, hp, mana;
 	int shotsLeft, reloadProgress, powerUpLeft;
 
 	public Hero() {
@@ -43,7 +43,7 @@ public class Hero extends Animation {
 		setY(Gdx.graphics.getHeight() / 2);
 		speed = 5;
 		shotsLeft = 10;
-		hp = 100;
+		hp = mana = 100;
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class Hero extends Animation {
 	}
 
 	public boolean decreaseHp() {
-		// hp -= .2;
+		hp -= 1;
 		if (hp <= 0)
 			return true;
 		else
@@ -150,8 +150,6 @@ public class Hero extends Animation {
 	public float getHp() {
 		return hp;
 	}
-	
-
 
 	/* *********** Animation State *********** */
 	public void unlockBehavior() {
@@ -235,5 +233,19 @@ public class Hero extends Animation {
 		return powerUpLeft > 0;
 	}
 
+	public void incHp(int inc) {
+		hp = Math.min(hp + inc, 100);
+	}
 
+	public void incMana(int inc) {
+		mana = Math.min(mana+inc, 100);
+	}
+
+	public float getMana() {
+		return mana;
+	}
+
+	public void decMana(int dec) {
+		mana = Math.max(0, mana-dec);
+	}
 }
