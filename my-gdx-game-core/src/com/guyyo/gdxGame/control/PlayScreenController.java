@@ -191,7 +191,7 @@ public class PlayScreenController implements GestureListener {
 					((Enemy) e).die();
 					PoolsReposetory.lightningPool.spawn(((Enemy) e).getX(),
 							((Enemy) e).getY());
-					Assets.thonder.play();
+					Assets.thonder.play(.5f);
 					SingletonsRepository.hero.decMana(5);
 					if (SingletonsRepository.hero.getMana() < 5)
 						break;

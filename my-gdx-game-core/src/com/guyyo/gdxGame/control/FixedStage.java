@@ -109,7 +109,7 @@ public class FixedStage extends Stage implements InputProcessor {
 		}
 		if (!fireButton.isDisabled() && fireButton.isChecked()) {
 			SingletonsRepository.fireOrb.spawn();
-			Assets.fireFX.play(.5f);
+			Assets.fireFX.play(.7f);
 			SingletonsRepository.hero.castSpell();
 			SingletonsRepository.hero.decMana(50);;
 			fireButton.setDisabled(true);

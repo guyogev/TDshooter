@@ -29,7 +29,7 @@ public final class Assets {
 			heroPistol, heroPistolReload, cow, powerUps, enemy2, blood_1,
 			blood_3, blood_4, blood_5, fireOrb, skeletonOccultist,
 			skeletonMage, skeletonKnight, sparks, lightning, ManaPowerUp,
-			HpPowerUp;
+			HpPowerUp, menuBg;
 
 	// drawables
 	public static Drawable fireButtonUp, fireButtonDown;
@@ -75,13 +75,15 @@ public final class Assets {
 		HpPowerUp = new Texture(Gdx.files.internal("powerups/hp.png"));
 		sparks = new Texture(Gdx.files.internal("fx/sparks.png"));
 		lightning = new Texture(Gdx.files.internal("fx/lightning.png"));
-
+		menuBg = new Texture(Gdx.files.internal("gameover.png"));
+		
 		skeletonOccultist = new Texture(
 				Gdx.files.internal("enemy/skeleton_occultist.png"));
 		skeletonMage = new Texture(
 				Gdx.files.internal("enemy/skeleton_mage.png"));
 		skeletonKnight = new Texture(
 				Gdx.files.internal("enemy/skeleton_knight.png"));
+		
 		// sound
 		shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/foom_0.wav"));
 		fireFX = Gdx.audio.newSound(Gdx.files
