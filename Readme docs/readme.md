@@ -29,8 +29,18 @@ pc: https://dl.dropboxusercontent.com/u/6869994/TDshooter.jar
 
 ##Credits:
 --------
+graphics
 http://opengameart.org/users/johndh     
 http://opengameart.org/users/vwolfdog       
-http://opengameart.org/users/short-ribs     
+http://opengameart.org/users/short-ribs   
+http://opengameart.org/users/justin-nichol
+http://opengameart.org/users/clint-bellanger 
+http://mrbubblewand.wordpress.com/2009/08/17/animation-thunder_002-2/
+
+sound:
+https://www.freesound.org/people/klangfabrik/
+https://www.freesound.org/people/smokebomb99/
+https://www.freesound.org/people/Julien%20Matthey/
+https://www.freesound.org/people/burning-mir/
 
 
